@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>더팀스(THE TEAMS)</title>
+    <link rel="shortcut icon" href="/includes/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/includes/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/includes/css/sticky-footer-navbar.css">
 </head>
