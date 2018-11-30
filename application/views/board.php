@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="padding: 2em 0;">
     <div class="d-flex justify-content-end">
         <form>
             <div class="form-row">
@@ -20,33 +20,29 @@
     <table class="table table-hover">
         <thead>
             <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+                <th scope="col">#</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
+                <th scope="col">조회수</th>
             </tr>
         </thead>
         <tbody>
+        <?php
+        foreach ($posts as $post) {
+        ?>
             <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+                <th scope="row"><?=$post->post_id?></th>
+                <td><?=$post->title?></td>
+                <td><?=$post->user_id?></td>
+                <td><?=$post->register_date?></td>
+                <td><?=$post->views?></td>
             </tr>
-            <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            </tr>
-            <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-            </tr>
+        <?php
+        } 
+        ?>
         </tbody>
-    </table> 
-    <div class="d-flex justify-content-center">
+    </table> <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item"><a class="page-link" href="#">처음</a></li>
