@@ -1,0 +1,42 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-sign {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.btn-submit {
+    color: #fff;
+    background-color: #1ABC9C;
+    border-radius: 27px;
+    border: 1px solid #1abc9c;
+    font-weight: 400;
+}
+
+/* 이용약관 css */
+.pub_join_p_color {
+    color: #949494;
+    text-align: left;
+}
+.tt-welcome-join-arg {
+    font-size: 11px;
+    line-height: 16px;
+}
+.pub_join_underbar {
+    text-decoration: underline;
+}
