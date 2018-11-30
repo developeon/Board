@@ -1,0 +1,5 @@
+<?=$post->post_id?>
+<?=$post->title?>
+<?=$post->content?>
+<?=$post->user_id?>
+<?=$post->views?>

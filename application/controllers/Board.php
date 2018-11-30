@@ -2,29 +2,43 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Board extends MY_Controller {
-
-        public function index()	
-        {
+        public function __construct() {
+                parent::__construct();
                 $this->load->database();
                 $this->load->model('post_model');
-                $data = $this->post_model->gets();
+        }
+
+        public function index()
+        {
                 $this->_header();
-                $this->load->view('board', array('posts'=>$data));
+                $posts = $this->post_model->gets();
+                $this->load->view('board', array('posts'=>$posts));
                 $this->_footer();
         }
 
         public function write()
         {
                 $this->_header();
-                $this->load->view('write');
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules('title', '제목', 'required');
+                $this->form_validation->set_rules('content', '본문', 'required');
+                if ($this->form_validation->run() == FALSE)
+                {
+                        $this->load->view('write');
+                }
+                else
+                {
+                      $post_id = $this->post_model->write($this->input->post('title'), $this->input->post('content'));
+                      $this->load->helper('url');
+                      redirect('board/read/'.$post_id);
+                 }
                 $this->_footer();
         }
 
-        public function write_action()
-        {
+        public function read($post_id){
                 $this->_header();
-                echo $this->input->post('title');
-                echo $this->input->post('content');
+                $post = $this->post_model->get($post_id);
+                $this->load->view('read', array('post'=>$post));
                 $this->_footer();
         }
 }

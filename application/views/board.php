@@ -1,4 +1,4 @@
-<div class="container" style="padding: 2em 0;">
+<div class="container">
     <div class="d-flex justify-content-end">
         <form>
             <div class="form-row">
@@ -33,7 +33,7 @@
         ?>
             <tr>
                 <th scope="row"><?=$post->post_id?></th>
-                <td><?=$post->title?></td>
+                <td><a href="/board/read/<?=$post->post_id?>"><?=$post->title?></a></td>
                 <td><?=$post->user_id?></td>
                 <td><?=$post->register_date?></td>
                 <td><?=$post->views?></td>
@@ -42,7 +42,11 @@
         } 
         ?>
         </tbody>
-    </table> <div class="d-flex justify-content-center">
+    </table> 
+    <p class="text-right">
+        <a href="/board/write" class="btn btn-primary">글쓰기</a>
+    </p>
+    <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item"><a class="page-link" href="#">처음</a></li>

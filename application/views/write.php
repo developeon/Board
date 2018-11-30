@@ -1,5 +1,6 @@
 <div class="container">
-    <form action="/board/write_action" method="post">
+    <?=validation_errors();?>
+    <form action="/board/write" method="post">
         <div class="form-group">
             <input type="text" class="form-control" name="title" placeholder="제목을 작성해주세요.">
         </div>
