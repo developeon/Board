@@ -1,5 +1,4 @@
 <div class="container">
-    <?php echo $pagination; ?>
     <div class="d-flex justify-content-end">
         <form>
             <div class="form-row">
@@ -17,7 +16,7 @@
                 </div>
             </div>
         </form>
-    </div> <!-- end of Search Box -->
+    </div> <!-- end of Search Box flex -->
     <table class="table table-hover">
         <thead>
             <tr>
@@ -49,27 +48,7 @@
     </p>
     <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">처음</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">이전</span>
-                </a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">다음</span>
-                </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">끝</a></li>
-            </ul>
-        </nav>
-    </div> <!-- end of Page navigation -->
+            <?php echo $pagination; ?>
+        </nav> <!-- end of page navigation -->
+    </div> <!-- end of page navigation flex-->
 </div> <!-- end of Container -->

@@ -18,7 +18,6 @@ class Post_model extends CI_Model {
         {
             return false;
         }
-        //return $this->db->query('SELECT * FROM post')->result();
     }
 
     public function getTotalRows()
