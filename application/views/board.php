@@ -33,7 +33,7 @@
         ?>
             <tr>
                 <th scope="row"><?=$post->post_id?></th>
-                <td><a href="/board/read/<?=$post->post_id?>"><?=$post->title?></a></td>
+                <td><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
                 <td><?=$post->user_id?></td>
                 <td><?=$post->register_date?></td>
                 <td><?=$post->views?></td>

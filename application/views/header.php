@@ -7,6 +7,13 @@
     <link rel="shortcut icon" href="/includes/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/includes/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/includes/css/sticky-footer-navbar.css">
+    <style>
+        @media (max-width: 768px) {
+            .dropdown-menu-right {
+                right: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">

@@ -6,6 +6,7 @@ class Board extends MY_Controller {
                 parent::__construct();
                 $this->load->database();
                 $this->load->model('post_model');
+                $this->load->model('comment_model');
         }
 
         public function index()
@@ -41,10 +42,6 @@ class Board extends MY_Controller {
                 $config['num_tag_close'] = '</li>';
 
                 $config['attributes'] = array('class' => 'page-link');
-
-                // $config = array(
-                //         // pagination config....
-                // );
 
                 $this->pagination->initialize($config);
                 $page = $this->uri->rsegment(3,0);
@@ -83,10 +80,22 @@ class Board extends MY_Controller {
                 $this->_footer();
         }
 
-        public function read($post_id){
+        public function write_comment()
+        {
+                $post_id = $this->input->post('post_id');
+                $this->comment_model->write($this->input->post('content'), $post_id);
+                $this->load->helper('url');
+                redirect('board/read/'.$post_id);
+        }
+
+        public function read($post_id)
+        {
+                $this->post_model->increaseViews($post_id);
                 $this->_header();
                 $post = $this->post_model->get($post_id);
-                $this->load->view('read', array('post'=>$post));
+                $comments = $this->comment_model->gets($post_id);
+                $count = $this->comment_model->getTotalRows($post_id);
+                $this->load->view('read', array('post'=>$post, 'comments'=>$comments, 'count'=>$count));
                 $this->_footer();
         }
 }

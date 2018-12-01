@@ -40,4 +40,10 @@ class Post_model extends CI_Model {
         ));
         return $this->db->insert_id();
     }
+
+    public function increaseViews($post_id)
+    {
+        $sql = 'update post set views=views+1 where post_id='.$post_id;
+        $this->db->query($sql);
+    }
 }
