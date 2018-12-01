@@ -32,9 +32,8 @@
                     <div class="dropdown">
                         <img src="/includes/img/dummy_profile.jpg" class="rounded-circle dropdown-toggle" data-toggle="dropdown" height="38px" alt="profile picture"> 
                         <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#">Link 1</a>
-                        <a class="dropdown-item" href="#">Link 2</a>
-                        <a class="dropdown-item" href="#">Link 3</a>
+                            <a class="dropdown-item" href="/auth/login">로그인</a>
+                            <a class="dropdown-item" href="/auth/join">회원가입</a>
                         </div>
                     </div>
                 </form>

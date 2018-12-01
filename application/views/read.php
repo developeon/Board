@@ -6,7 +6,6 @@
     .media {
         border-radius: 0.25rem;
         padding: 1rem;
-        margin-bottom: 1rem;
     }
 </style>
 <div class="container">
