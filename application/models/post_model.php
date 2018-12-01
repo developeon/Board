@@ -5,9 +5,26 @@ class Post_model extends CI_Model {
         parent::_construct();
     }
 
-    public function gets()
+    public function gets($limit, $start)
     {
-        return $this->db->query('SELECT * FROM post')->result();
+        $this->db->order_by('post_id', 'desc');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get('post');
+        if ($query->num_rows() > 0) 
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+        //return $this->db->query('SELECT * FROM post')->result();
+    }
+
+    public function getTotalRows()
+    {
+        $query = $this->db->query('SELECT * FROM post');
+        return $query->num_rows();
     }
 
     public function get($post_id)

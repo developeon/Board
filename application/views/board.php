@@ -1,4 +1,5 @@
 <div class="container">
+    <?php echo $pagination; ?>
     <div class="d-flex justify-content-end">
         <form>
             <div class="form-row">

@@ -11,8 +11,20 @@ class Board extends MY_Controller {
         public function index()
         {
                 $this->_header();
-                $posts = $this->post_model->gets();
-                $this->load->view('board', array('posts'=>$posts));
+
+                $this->load->library('pagination');
+
+                $config['base_url'] = '/board/index/';
+                $config['total_rows'] = $this->post_model->getTotalRows(); //sample
+                $config['per_page'] = 10; //한 페이지당 n개 출력
+
+                $this->pagination->initialize($config);
+                $page = $this->uri->rsegment(3,0);
+                $data['pagination'] = $this->pagination->create_links();
+
+                $data['posts'] = $this->post_model->gets($config['per_page'], $page);
+                $this->load->view('board', $data);
+                
                 $this->_footer();
         }
 
