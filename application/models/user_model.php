@@ -14,4 +14,10 @@ class User_model extends CI_Model {
         $result = $this->db->insert_id();
         return $result;
     }
+
+    function getByEmail($option)
+    {
+        $result = $this->db->get_where('user', array('email'=>$option['email']))->row();
+        return $result;
+    }
 }

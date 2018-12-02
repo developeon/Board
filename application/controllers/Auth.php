@@ -29,11 +29,21 @@ class Auth extends MY_Controller {
             else
             {
                 $hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-                $this->user_model->register(array(
+                $result = $this->user_model->register(array(
                     'name'=>$this->input->post('name'),
                     'email'=>$this->input->post('email'),
                     'password'=>$hash
                 ));
+                if ($result > 0)
+                {
+                    //TODO :alert창 띄우고 로그인페이지로
+                    $this->load->helper('url');
+                    redirect('/auth/login');
+                }
+                else
+                {
+                    echo "회원가입 실패. 다시시도하세요"; //TODO: alert창 띄우고 다시 회원가입 페이지로
+                }
             }
             $this->_footer();
         }
@@ -43,5 +53,28 @@ class Auth extends MY_Controller {
             $this->_header();
             $this->load->view('login');
             $this->_footer();
+        }
+
+        public function logout(){
+            $this->session->sess_destroy();
+            $this->load->helper('url');
+            redirect('/');
+        }
+
+        public function authentication()
+        {
+            $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
+            if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
+            {
+                $this->session->set_userdata('is_login', true);
+                $this->load->helper('url');
+                redirect('/board');
+            }
+            else
+            {
+                $this->session->set_flashdata('message', '로그인에 실패했습니다.');
+                $this->load->helper('url');
+                redirect('/auth/login');
+            }
         }
 }

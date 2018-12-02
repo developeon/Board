@@ -32,8 +32,21 @@
                     <div class="dropdown">
                         <img src="/includes/img/dummy_profile.jpg" class="rounded-circle dropdown-toggle" data-toggle="dropdown" height="38px" alt="profile picture"> 
                         <div class="dropdown-menu dropdown-menu-right">
+                        <?php
+                        if ($this->session->userdata('is_login'))
+                        { ?>
+                            <a class="dropdown-item" href="/board">게시글보기</a>
+                            <a class="dropdown-item" href="/auth/logout">로그아웃</a>
+                        <?php
+                        }
+                        else
+                        { ?>
+                            <a class="dropdown-item" href="/board">게시글보기</a>
                             <a class="dropdown-item" href="/auth/login">로그인</a>
                             <a class="dropdown-item" href="/auth/join">회원가입</a>
+                        <?php
+                        } ?>
+                            
                         </div>
                     </div>
                 </form>

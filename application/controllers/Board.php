@@ -63,6 +63,15 @@ class Board extends MY_Controller {
 
         public function write()
         {
+                // if ()
+                // {
+                //         $this->load->helper('url');
+                //         redirect('/auth/login');
+                // }
+                // else
+                // {
+
+                // }
                 $this->_header();
                 $this->load->library('form_validation');
                 $this->form_validation->set_rules('title', '제목', 'required');
@@ -75,7 +84,7 @@ class Board extends MY_Controller {
                 {
                       $post_id = $this->post_model->write($this->input->post('title'), $this->input->post('content'));
                       $this->load->helper('url');
-                      redirect('board/read/'.$post_id);
+                      redirect('/board/read/'.$post_id);
                  }
                 $this->_footer();
         }
@@ -85,7 +94,7 @@ class Board extends MY_Controller {
                 $post_id = $this->input->post('post_id');
                 $this->comment_model->write($this->input->post('content'), $post_id);
                 $this->load->helper('url');
-                redirect('board/read/'.$post_id);
+                redirect('/board/read/'.$post_id);
         }
 
         public function read($post_id)
