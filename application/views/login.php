@@ -4,7 +4,7 @@
     margin-bottom: 0;
   }
 </style>
-<form class="form-sign" action="/auth/authentication" method="post">
+<form class="form-sign" action="/auth/authentication/login" method="post">
   <h1 class="h3 mb-3 font-weight-normal">바른 채용을 위한 키워드, 더팀스</h1>
   <div class="form-group">
     <input type="text" class="form-control" placeholder="이메일" name="email">

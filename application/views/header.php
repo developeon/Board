@@ -56,7 +56,6 @@
                             <a class="dropdown-item" href="/auth/join">회원가입</a>
                         <?php
                         } ?>
-                            
                         </div>
                     </div>
                 </form>

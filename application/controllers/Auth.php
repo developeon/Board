@@ -16,6 +16,13 @@ class Auth extends MY_Controller {
 
         public function join()
         {
+            if($this->session->userdata('is_login'))
+            {
+                $this->load->helper('url');
+                $this->session->set_flashdata('message', '잘못된 접근입니다.');
+                redirect('/board');
+            }
+
             $this->_header();
             $this->load->library('form_validation');
             $this->form_validation->set_rules('name', '이름', 'required|max_length[20]');
@@ -42,7 +49,9 @@ class Auth extends MY_Controller {
                 }
                 else
                 {
-                    echo "회원가입 실패. 다시시도하세요"; //TODO: alert창 띄우고 다시 회원가입 페이지로
+                    $this->load->helper('url');
+                    $this->session->set_flashdata('message', '회원가입에 실패했습니다.');
+                    redirect('/auth/join');
                 }
             }
             $this->_footer();
@@ -50,6 +59,12 @@ class Auth extends MY_Controller {
 
         public function login()
         {
+            if($this->session->userdata('is_login'))
+            {
+                $this->load->helper('url');
+                $this->session->set_flashdata('message', '잘못된 접근입니다.');
+                redirect('/board');
+            }
             $this->_header();
             $this->load->view('login');
             $this->_footer();
@@ -63,12 +78,20 @@ class Auth extends MY_Controller {
 
         public function authentication()
         {
+           
             $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
             if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
             {
                 $this->session->set_userdata('is_login', true);
                 $this->load->helper('url');
-                redirect('/board');
+                if($this->uri->segment(3,0)=='login') //로그인 페이지에서 로그인한 경우
+                {
+                    redirect('/board');
+                }
+                if($this->uri->segment(3,0)=='write') //글쓰기 버튼을 통해 로그인한 경우
+                {
+                    redirect('/board/write');
+                }
             }
             else
             {

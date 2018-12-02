@@ -43,3 +43,14 @@
     </div>
     <button class="btn btn-lg btn-submit btn-block" type="submit">가입하기</button>
   </form>
+
+<?php
+if ($this->session->flashdata('message'))
+{
+?>
+  <script>
+    alert("<?=$this->session->flashdata('message')?>");
+  </script>
+<?php
+}
+?>
