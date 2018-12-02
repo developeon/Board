@@ -3,9 +3,11 @@
         <form>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <select id="inputState" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select class="form-control">
+                        <option  value="" selected>제목+내용</option>
+                        <option value="">제목만</option>
+                        <option value="">내용만</option>
+                        <option value="">글 작성자</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">

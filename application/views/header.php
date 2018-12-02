@@ -13,12 +13,22 @@
                 right: auto;
             }
         }
+        .navbar {
+            background: #fff;
+            border-bottom: 1px solid #dedede;
+            box-shadow: 0px 2px 2px -2px rgba(0,0,0,0.15);
+        }
+
+        .nav-link {
+            color: #606060;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="/board">THE TEAMS</a>
+            <a class="navbar-brand" href="/board"><img src="/includes/img/logo.png" alt="theteams logo" style="width: 125px;"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

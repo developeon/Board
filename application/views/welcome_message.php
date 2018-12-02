@@ -78,7 +78,7 @@ body {
   			</div>
 		</div>
 	</div>
-<video autoplay="" loop="" muted="" style="opacity: 0.1;">
+<video autoplay="" loop="" muted="" style="opacity: 0.2;">
 	<source src="/includes/video/main7.mp4" type="video/mp4">
 </video>
 <script type="text/javascript" src="/includes/js/jquery-3.3.1.min.js"></script>
