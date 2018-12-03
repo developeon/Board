@@ -52,7 +52,7 @@ class Board extends MY_Controller {
                 //echo var_dump($data['posts']);
                 foreach ($data['posts'] as $post)
                 {
-                        $post->user_name = $this->user_model->getUserName($post->user_id); //이게 이름이 되야함
+                        $post->user_name = $this->user_model->get($post->user_id)['name'];
                 }
                 if ($data['posts']===FALSE)
                 {
@@ -105,13 +105,13 @@ class Board extends MY_Controller {
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
                 $data['post'] = $this->post_model->get($post_id);
-                $data['post']->user_name = $this->user_model->getUserName($data['post']->user_id);
+                $data['post']->user_name = $this->user_model->get($data['post']->user_id)['name'];
                 $data['comments'] = $this->comment_model->gets($post_id);
                 $data['count'] = $this->comment_model->getTotalRows($post_id);
                 if ($data['comments'])
                 {
                         foreach ($data['comments'] as $comment) {
-                                $comment->user_name = $this->user_model->getUserName($comment->user_id);
+                                $comment->user_name = $this->user_model->get($comment->user_id)['name'];
                         }
                 }
                 

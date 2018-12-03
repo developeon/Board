@@ -21,11 +21,10 @@ class User_model extends CI_Model {
         return $result;
     }
 
-    function getUserName($user_id)
+    function get($user_id)
     {
-        //여기서 name값 리턴 
         $query = $this->db->get_where('user', array('user_id' => $user_id));
         $row = $query->row_array();
-        return $row['name'];
+        return $row;
     }
 }
