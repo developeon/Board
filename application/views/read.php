@@ -28,10 +28,22 @@
                 <input type="hidden" name="post_id" value="<?=$post->post_id?>">
                 <div class="row" style="margin-bottom: 1rem;">
                     <div class="col-10">
-                        <textarea class="form-control" name="content"></textarea>
+                        <textarea class="form-control" name="content" required></textarea>
                     </div>
                     <div class="col-2 pl-0">
-                        <button class="btn btn-default w-100 h-100" type="submit">등록</button>
+                        <?php
+                        if ($this->session->userdata('is_login'))
+                        { ?>
+                            <button class="btn btn-default w-100 h-100" type="submit">등록</button>
+                        <?php
+                        }
+                        else
+                        { ?>
+                            <button class="btn btn-default w-100 h-100" type="button" data-toggle="modal" data-target="#myModal">
+                                등록
+                            </button>
+                        <?php
+                        } ?>
                     </div>
                 </div>
             </form>
@@ -56,6 +68,31 @@
             }
             ?>
               
+        </div>
+    </div>
+</div>
+
+<!-- 로그인 modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">THE TEAMS</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="/auth/authentication/comment/<?=$post->post_id?>" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="이메일" name="email">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="패스워드" name="password">
+                    </div>
+                    <button class="btn btn-lg btn-submit btn-block" type="submit">로그인</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

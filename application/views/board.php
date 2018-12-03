@@ -1,3 +1,16 @@
+<style>
+    table.posts {
+        text-align: center;
+    }
+    .title {
+        max-width: 300px;
+        min-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+</style>
 <div class="container">
     <div class="d-flex justify-content-end">
         <form>
@@ -19,7 +32,7 @@
             </div>
         </form>
     </div> <!-- end of Search Box flex -->
-    <table class="table table-hover">
+    <table class="table table-hover posts">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -35,7 +48,7 @@
         ?>
             <tr>
                 <th scope="row"><?=$post->post_id?></th>
-                <td><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
+                <td class="title"><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
                 <td><?=$post->user_name?></td>
                 <td><?=$post->register_date?></td>
                 <td><?=$post->views?></td>
@@ -79,7 +92,7 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form action="/auth/authentication/write" method="post">
+                <form action="/auth/authentication/post" method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="이메일" name="email">
                     </div>

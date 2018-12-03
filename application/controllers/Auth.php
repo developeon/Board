@@ -89,9 +89,13 @@ class Auth extends MY_Controller {
                 {
                     redirect('/board');
                 }
-                if($this->uri->segment(3,0)=='write') //글쓰기 버튼을 통해 로그인한 경우
+                else if($this->uri->segment(3,0)=='post') //글쓰기 버튼을 통해 로그인한 경우
                 {
                     redirect('/board/write');
+                }
+                else if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
+                {
+                    redirect('/board/read/'.$this->uri->segment(4,0));
                 }
             }
             else
