@@ -52,7 +52,7 @@ class Board extends MY_Controller {
                 //echo var_dump($data['posts']);
                 foreach ($data['posts'] as $post)
                 {
-                        $post->user_name = $this->user_model->get($post->user_id)['name'];
+                        $post->user_name = $this->user_model->get($post->user_id)->row()->name;
                 }
                 if ($data['posts']===FALSE)
                 {
@@ -104,18 +104,70 @@ class Board extends MY_Controller {
         {
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
-                $data['post'] = $this->post_model->get($post_id);
-                $data['post']->user_name = $this->user_model->get($data['post']->user_id)['name'];
+                $data['post'] = $this->post_model->get($post_id)->row();
+                $data['post']->user_name = $this->user_model->get($data['post']->user_id)->row()->name;
                 $data['comments'] = $this->comment_model->gets($post_id);
                 $data['count'] = $this->comment_model->getTotalRows($post_id);
                 if ($data['comments'])
                 {
                         foreach ($data['comments'] as $comment) {
-                                $comment->user_name = $this->user_model->get($comment->user_id)['name'];
+                                $comment->user_name = $this->user_model->get($comment->user_id)->row()->name;
                         }
                 }
                 
                 $this->load->view('read', $data);
                 $this->_footer();
         }
+
+        public function update($post_id)
+        {
+                $user_id = $this->session->userdata('user_id');
+                $data['post'] = $this->post_model->get($post_id)->row();
+                if ($user_id === $data['post']->user_id)
+                {
+                        $this->_header();
+                        $this->load->view('update', $data);
+                        $this->_footer();
+                }
+                else
+                {
+                        $this->load->helper('url');
+                        $this->session->set_flashdata('message', '접근 권한이 없습니다.');
+                        redirect('/board/read/'.$post_id);
+                }
+        }
+
+        public function update_proc($post_id)
+        {
+                $user_id = $this->session->userdata('user_id');
+                $data['post'] = $this->post_model->get($post_id)->row();
+                if ($user_id != $data['post']->user_id)
+                {
+                        $this->load->helper('url');
+                        $this->session->set_flashdata('message', '접근 권한이 없습니다.');
+                        redirect('/board');
+                }
+                if($this->input->post('title') && $this->input->post('content'))
+                {
+                        $result = $this->post_model->update($post_id, $this->input->post('title'), $this->input->post('content'));
+                        if ($result)
+                        {
+                                $this->session->set_flashdata('message', '게시글이 수정되었습니다.'); 
+                        }
+                        else
+                        {
+                                $this->session->set_flashdata('message', '게시글 수정에 실패했습니다.');
+                        }
+                        $this->load->helper('url');
+                        redirect('/board/read/'.$post_id);
+                }
+                else
+                {
+                        $this->load->helper('url');
+                        $this->session->set_flashdata('message', '잘못된 접근입니다.');
+                        redirect('/board');
+                }
+        }
+
+        //TDO: 게시물 삭제 함수 생성
 }

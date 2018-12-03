@@ -23,9 +23,7 @@ class User_model extends CI_Model {
 
     function get($user_id)
     {
-        $query = $this->db->get_where('user', array('user_id' => $user_id));
-        $row = $query->row_array();
-        return $row;
+        return $this->db->get_where('user', array('user_id' => $user_id));
     }
 
     public function updateProfilePicture($file_name)

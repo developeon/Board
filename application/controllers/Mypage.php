@@ -17,7 +17,7 @@ class Mypage extends MY_Controller {
             redirect('/board');
         }
 
-        $data['user'] = $this->user_model->get($this->session->userdata('user_id'));
+        $data['user'] = $this->user_model->get($this->session->userdata('user_id'))->row();
 
         $this->_header();
         $this->load->view('mypage', $data);

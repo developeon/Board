@@ -28,7 +28,7 @@ class Post_model extends CI_Model {
 
     public function get($post_id)
     {
-        return $this->db->get_where('post', array('post_id'=>$post_id))->row();
+        return $this->db->get_where('post', array('post_id'=>$post_id));
     }
 
     public function write($title, $content, $user_id)
@@ -45,5 +45,12 @@ class Post_model extends CI_Model {
     {
         $sql = 'update post set views=views+1 where post_id='.$post_id;
         $this->db->query($sql);
+    }
+
+    public function update($post_id, $titile, $content)
+    {
+        
+        $sql = "UPDATE post set title=?, content=? WHERE post_id=?";
+        return $this->db->query($sql, array($titile, $content, $post_id));
     }
 }

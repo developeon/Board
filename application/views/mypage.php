@@ -38,7 +38,7 @@
             <form action="/mypage/update" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-lg-4 text-center" style="padding: 1rem;">
-                        <img src="/includes/img/profile_picture/<?=$user['profile_picture']?>" class="rounded-circle profile-page" alt="profile picture">
+                        <img src="/includes/img/profile_picture/<?=$user->profile_picture?>" class="rounded-circle profile-page" alt="profile picture">
                         <span class="btn btn-primary btn-file">
                             바꾸기 <input type="file" name="profile_picture">
                         </span>
@@ -47,19 +47,19 @@
                         <div class="form-group row">
                             <label for="name" class="col-sm-2 col-form-label">이름</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="name" placeholder="이름을 입력해주세요" value="<?=$user['name']?>">
+                                <input type="text" class="form-control" id="name" placeholder="이름을 입력해주세요" value="<?=$user->name?>">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="register_date" class="col-sm-2 col-form-label">가입일</label>
                             <div class="col-sm-10">
-                                <div class="form-control"><?=$user['register_date']?></div>
+                                <div class="form-control"><?=$user->register_date?></div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="email" class="col-sm-2 col-form-label">이메일</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요" value="<?=$user['email']?>">
+                                <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요" value="<?=$user->email?>">
                                 <p class="text-muted" style="margin-top: 0.5rem;margin-bottom: 0.5rem;"><small>이메일 인증 후 글쓰기, 댓글달기 기능을 이용하실 수 있습니다.</small></p>
                                 <button class="btn btn-primary" type="button">인증하기</button>
                             </div>

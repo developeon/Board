@@ -12,7 +12,7 @@ class MY_Controller extends CI_Controller {
         $this->load->model('user_model');
         if ($this->session->userdata('user_id'))
         {
-            $data['profile_picture'] = $this->user_model->get($this->session->userdata('user_id'))['profile_picture'];
+            $data['profile_picture'] = $this->user_model->get($this->session->userdata('user_id'))->row()->profile_picture;
         }
         else 
         {
