@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                    <a class="nav-link" href="/board">게시글보기 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/board">게시물 보기 <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
                 <form class="form-inline mt-2 mt-md-0">
@@ -45,15 +45,18 @@
                         <?php
                         if ($this->session->userdata('is_login'))
                         { ?>
-                            <a class="dropdown-item" href="/board">게시글보기</a>
-                            <a class="dropdown-item" href="/auth/logout">로그아웃</a>
+                            
+                            <a class="dropdown-item" href="/board"><img src="/includes/img/material_icons/edit.svg" alt="" style="width:18px;"> 게시물 보기</a>
+                            <a class="dropdown-item" href="#"><img src="/includes/img/material_icons/dashboard.svg" alt="" style="width:18px;"> 나의 활동</a>
+                            <a class="dropdown-item" href="#"><img src="/includes/img/material_icons/face.svg" alt="" style="width:18px;"> 내 정보 관리</a>
+                            <a class="dropdown-item" href="/auth/logout"><img src="/includes/img/material_icons/logout.svg" alt="" style="width:18px;"> 로그아웃</a>
                         <?php
                         }
                         else
                         { ?>
-                            <a class="dropdown-item" href="/board">게시글보기</a>
-                            <a class="dropdown-item" href="/auth/login">로그인</a>
-                            <a class="dropdown-item" href="/auth/join">회원가입</a>
+                            <a class="dropdown-item" href="/board"><img src="/includes/img/material_icons/edit.svg" alt="" style="width:18px;"> 게시물 보기</a>
+                            <a class="dropdown-item" href="/auth/login"><img src="/includes/img/material_icons/login.svg" alt="" style="width:18px;"> 로그인</a>
+                            <a class="dropdown-item" href="/auth/join"><img src="/includes/img/material_icons/person_add.svg" alt="" style="width:18px;"> 회원가입</a>
                         <?php
                         } ?>
                         </div>
