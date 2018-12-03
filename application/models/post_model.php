@@ -31,12 +31,12 @@ class Post_model extends CI_Model {
         return $this->db->get_where('post', array('post_id'=>$post_id))->row();
     }
 
-    public function write($title, $content)
+    public function write($title, $content, $user_id)
     {
         $this->db->insert('post', array(
             'title'=>$title,
             'content'=>$content,
-            'user_id'=>1
+            'user_id'=>$user_id
         ));
         return $this->db->insert_id();
     }

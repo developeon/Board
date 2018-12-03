@@ -20,4 +20,12 @@ class User_model extends CI_Model {
         $result = $this->db->get_where('user', array('email'=>$option['email']))->row();
         return $result;
     }
+
+    function getUserName($user_id)
+    {
+        //여기서 name값 리턴 
+        $query = $this->db->get_where('user', array('user_id' => $user_id));
+        $row = $query->row_array();
+        return $row['name'];
+    }
 }

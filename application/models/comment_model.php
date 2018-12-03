@@ -18,12 +18,12 @@ class Comment_model extends CI_Model {
         }
     }
     
-    public function write($content, $post_id)
+    public function write($content, $post_id, $user_id)
     {
         $this->db->insert('comment', array(
             'content'=>$content,
             'post_id'=>$post_id,
-            'user_id'=>1
+            'user_id'=>$user_id
         ));
         return $this->db->insert_id();
     }

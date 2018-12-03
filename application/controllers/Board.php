@@ -6,6 +6,7 @@ class Board extends MY_Controller {
                 parent::__construct();
                 $this->load->database();
                 $this->load->model('post_model');
+                $this->load->model('user_model');
                 $this->load->model('comment_model');
         }
 
@@ -48,6 +49,11 @@ class Board extends MY_Controller {
                 $data['pagination'] = $this->pagination->create_links();
 
                 $data['posts'] = $this->post_model->gets($config['per_page'], $page);
+                //echo var_dump($data['posts']);
+                foreach ($data['posts'] as $post)
+                {
+                        $post->user_name = $this->user_model->getUserName($post->user_id); //이게 이름이 되야함
+                }
                 if ($data['posts']===FALSE)
                 {
                         echo "404 Error";
@@ -63,15 +69,12 @@ class Board extends MY_Controller {
 
         public function write()
         {
-                // if ()
-                // {
-                //         $this->load->helper('url');
-                //         redirect('/auth/login');
-                // }
-                // else
-                // {
-
-                // }
+                if(!$this->session->userdata('is_login'))
+                {
+                    $this->load->helper('url');
+                    $this->session->set_flashdata('message', '잘못된 접근입니다.');
+                    redirect('/board');
+                }
                 $this->_header();
                 $this->load->library('form_validation');
                 $this->form_validation->set_rules('title', '제목', 'required');
@@ -82,7 +85,7 @@ class Board extends MY_Controller {
                 }
                 else
                 {
-                      $post_id = $this->post_model->write($this->input->post('title'), $this->input->post('content'));
+                      $post_id = $this->post_model->write($this->input->post('title'), $this->input->post('content'), $this->session->userdata('user_id'));
                       $this->load->helper('url');
                       redirect('/board/read/'.$post_id);
                  }
@@ -92,7 +95,7 @@ class Board extends MY_Controller {
         public function write_comment()
         {
                 $post_id = $this->input->post('post_id');
-                $this->comment_model->write($this->input->post('content'), $post_id);
+                $this->comment_model->write($this->input->post('content'), $post_id, $this->session->userdata('user_id'));
                 $this->load->helper('url');
                 redirect('/board/read/'.$post_id);
         }
@@ -105,6 +108,7 @@ class Board extends MY_Controller {
                 $comments = $this->comment_model->gets($post_id);
                 $count = $this->comment_model->getTotalRows($post_id);
                 $this->load->view('read', array('post'=>$post, 'comments'=>$comments, 'count'=>$count));
+                //TODO: $data['post'], $data['comments] 이런식으로 바꾸고 post, comments에 user_name넣어주기
                 $this->_footer();
         }
 }

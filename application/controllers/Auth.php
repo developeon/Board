@@ -83,6 +83,7 @@ class Auth extends MY_Controller {
             if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
             {
                 $this->session->set_userdata('is_login', true);
+                $this->session->set_userdata('user_id', $this->user_model->getByEmail(array('email'=>$this->input->post('email')))->user_id);
                 $this->load->helper('url');
                 if($this->uri->segment(3,0)=='login') //로그인 페이지에서 로그인한 경우
                 {
