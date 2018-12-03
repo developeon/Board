@@ -40,8 +40,7 @@
                 </ul>
                 <form class="form-inline mt-2 mt-md-0">
                     <div class="dropdown">
-                        <img src="/includes/img/<?=$profile_picture?>" class="rounded-circle dropdown-toggle" data-toggle="dropdown" width="38px" height="38px" alt="profile picture"> 
-                        <!-- TODO: profile 이미지 업로드되는 경로로 바꿔주기 -->
+                        <img src="/includes/img/profile_picture/<?=$profile_picture?>" class="rounded-circle dropdown-toggle" data-toggle="dropdown" width="38px" height="38px" alt="profile picture"> 
                         <div class="dropdown-menu dropdown-menu-right">
                         <?php
                         if ($this->session->userdata('is_login'))

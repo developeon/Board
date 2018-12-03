@@ -27,4 +27,11 @@ class User_model extends CI_Model {
         $row = $query->row_array();
         return $row;
     }
+
+    public function updateProfilePicture($file_name)
+    {
+        
+        $sql = "UPDATE user set profile_picture=? WHERE user_id=?";
+        return $this->db->query($sql, array($file_name, $this->session->userdata('user_id')));
+    }
 }
