@@ -8,7 +8,18 @@ class MY_Controller extends CI_Controller {
 
     function _header() 
     {
-        $this->load->view('header');
+        $this->load->database();
+        $this->load->model('user_model');
+        if ($this->session->userdata('user_id'))
+        {
+            $data['profile_picture'] = $this->user_model->get($this->session->userdata('user_id'))['profile_picture'];
+        }
+        else 
+        {
+            $data['profile_picture'] = "dummy_profile.jpg";
+        }
+       
+        $this->load->view('header', $data);
     }
 
     function _footer() 

@@ -40,7 +40,8 @@
                 </ul>
                 <form class="form-inline mt-2 mt-md-0">
                     <div class="dropdown">
-                        <img src="/includes/img/dummy_profile.jpg" class="rounded-circle dropdown-toggle" data-toggle="dropdown" height="38px" alt="profile picture"> 
+                        <img src="/includes/img/<?=$profile_picture?>" class="rounded-circle dropdown-toggle" data-toggle="dropdown" width="38px" height="38px" alt="profile picture"> 
+                        <!-- TODO: profile 이미지 업로드되는 경로로 바꿔주기 -->
                         <div class="dropdown-menu dropdown-menu-right">
                         <?php
                         if ($this->session->userdata('is_login'))
@@ -48,7 +49,7 @@
                             
                             <a class="dropdown-item" href="/board"><img src="/includes/img/material_icons/edit.svg" alt="" style="width:18px;"> 게시물 보기</a>
                             <a class="dropdown-item" href="#"><img src="/includes/img/material_icons/dashboard.svg" alt="" style="width:18px;"> 나의 활동</a>
-                            <a class="dropdown-item" href="#"><img src="/includes/img/material_icons/face.svg" alt="" style="width:18px;"> 내 정보 관리</a>
+                            <a class="dropdown-item" href="/profile"><img src="/includes/img/material_icons/face.svg" alt="" style="width:18px;"> 내 정보 관리</a>
                             <a class="dropdown-item" href="/auth/logout"><img src="/includes/img/material_icons/logout.svg" alt="" style="width:18px;"> 로그아웃</a>
                         <?php
                         }
