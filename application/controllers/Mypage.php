@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profile extends MY_Controller {
+class Mypage extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->database();
@@ -10,9 +10,17 @@ class Profile extends MY_Controller {
 
 	public function index()
 	{
-        // TODO: 로그인 안된 유저의 접근 막기, userdata넘겨주고 찍기
+        if(!$this->session->userdata('is_login'))
+        {
+            $this->load->helper('url');
+            $this->session->set_flashdata('message', '잘못된 접근입니다.');
+            redirect('/board');
+        }
+
+        $data['user'] = $this->user_model->get($this->session->userdata('user_id'));
+
         $this->_header();
-        $this->load->view('profile');
+        $this->load->view('mypage', $data);
         $this->_footer();
     }
     
@@ -48,7 +56,7 @@ class Profile extends MY_Controller {
                     $this->session->set_flashdata('message', '프로필이 수정되었습니다.');
                 }
                 $this->load->helper('url');
-                redirect('/profile');
+                redirect('/mypage');
                
         }
     }
