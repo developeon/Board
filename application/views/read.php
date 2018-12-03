@@ -11,12 +11,12 @@
 <div class="container">
     <div class="card text-center">
         <div class="card-header">
-            <div class="row">
-                <div class="col-sm-8"><h5 class="text-left"><?=$post->title?></h5></div>
-                <div class="col-sm-4"><p class="text-right">작성일 <?=$post->register_date?> | 작성자 <?=$post->user_id?> | 조회수 <?=$post->views?></p></div>
+            <div class="container">
+                <h5 class="text-left m-0"><?=$post->title?></h5>
             </div>
         </div>
         <div class="card-body">
+            <p class="text-right">작성자 <a href="#"><?=$post->user_name?></a> | 작성일 <?=$post->register_date?> | 조회수 <?=$post->views?></p>
             <p class="card-text"><?=$post->content?></p>
             <p class="text-right">
                 <a href="#" class="btn btn-primary">수정</a>
@@ -59,7 +59,7 @@
                 <div class="media">
                     <img class="mr-3 rounded-circle" src="/includes/img/dummy_profile.jpg" alt="profile picture" style="width:48px;height:48px;">
                     <div class="media-body" style="text-align: left;">
-                        <h6 class="mt-0" style="margin-bottm: 0;"><?=$comment->user_id?> | <?=$comment->register_date?></h6>
+                        <h6 class="mt-0" style="margin-bottm: 0;"><a href=""><?=$comment->user_name?></a> | <?=$comment->register_date?></h6>
                         <?=$comment->content?>
                     </div>
                 </div>

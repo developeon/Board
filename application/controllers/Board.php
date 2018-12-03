@@ -104,11 +104,18 @@ class Board extends MY_Controller {
         {
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
-                $post = $this->post_model->get($post_id);
-                $comments = $this->comment_model->gets($post_id);
-                $count = $this->comment_model->getTotalRows($post_id);
-                $this->load->view('read', array('post'=>$post, 'comments'=>$comments, 'count'=>$count));
-                //TODO: $data['post'], $data['comments] 이런식으로 바꾸고 post, comments에 user_name넣어주기
+                $data['post'] = $this->post_model->get($post_id);
+                $data['post']->user_name = $this->user_model->getUserName($data['post']->user_id);
+                $data['comments'] = $this->comment_model->gets($post_id);
+                $data['count'] = $this->comment_model->getTotalRows($post_id);
+                if ($data['comments'])
+                {
+                        foreach ($data['comments'] as $comment) {
+                                $comment->user_name = $this->user_model->getUserName($comment->user_id);
+                        }
+                }
+                
+                $this->load->view('read', $data);
                 $this->_footer();
         }
 }
