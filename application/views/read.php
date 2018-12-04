@@ -11,10 +11,15 @@
 <div class="container">
     <div class="card text-center">
         <div class="card-header">
-            <h5 class="text-left m-0"><?=$post->title?></h5>
+            <div class="row">
+                <div class="col-lg-10"><h5 class="text-left m-0"><?=$post->title?></h5></div>
+                <div class="col-lg-2"><p class="text-right m-0"><?=$post->register_date?></p></div>
+            </div>
         </div>
         <div class="card-body">
-            <p class="text-right">작성자 <a href="#"><?=$post->user_name?></a> | 작성일 <?=$post->register_date?> | 조회수 <?=$post->views?></p>
+            <p class="text-left">
+                <img class="mr-1 rounded-circle" src="/includes/img/profile_picture/<?=$post->user_profile_picture?>" alt="profile picture" style="width:32px;height:32px;">
+                <a href="#"><?=$post->user_name?></a></p>
             <p class="text-left"><?=$post->content?></p>
             <p class="text-right">
             <?php
@@ -53,7 +58,7 @@
                 </div>
             </form>
             <p class="text-left">
-                <b>댓글 (<?=$count?>)</b>
+                <b>댓글 (<?=$count?>) | 조회수 (<?=$post->views?>)</b>
             </p>
             <hr/>
             <?php
@@ -62,7 +67,7 @@
                 foreach ($comments as $comment) {
             ?>
                 <div class="media">
-                    <img class="mr-3 rounded-circle" src="/includes/img/dummy_profile.jpg" alt="profile picture" style="width:48px;height:48px;">
+                    <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$comment->user_profile_picture?>" alt="profile picture" style="width:48px;height:48px;">
                     <div class="media-body" style="text-align: left;">
                         <h6 class="mt-0" style="margin-bottm: 0;"><a href=""><?=$comment->user_name?></a> | <?=$comment->register_date?></h6>
                         <?=$comment->content?>

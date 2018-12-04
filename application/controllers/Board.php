@@ -112,13 +112,19 @@ class Board extends MY_Controller {
                         $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
                         redirect('/board');
                 }
-                $data['post']->user_name = $this->user_model->get($data['post']->user_id)->row()->name;
+
+                $post_data = $this->user_model->get($data['post']->user_id)->row();
+                $data['post']->user_name = $post_data->name;
+                $data['post']->user_profile_picture = $post_data->profile_picture;
+
                 $data['comments'] = $this->comment_model->gets($post_id);
                 $data['count'] = $this->comment_model->getTotalRows($post_id);
                 if ($data['comments'])
                 {
                         foreach ($data['comments'] as $comment) {
-                                $comment->user_name = $this->user_model->get($comment->user_id)->row()->name;
+                                $comment_data = $this->user_model->get($comment->user_id)->row();
+                                $comment->user_name = $comment_data->name;
+                                $comment->user_profile_picture = $comment_data->profile_picture;
                         }
                 }
                 
