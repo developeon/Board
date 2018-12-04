@@ -7,8 +7,7 @@ class Welcome extends CI_Controller {
 	{
 		if ($this->session->userdata('is_login'))
 		{
-			$this->load->helper('url');
-            redirect('/board');
+            	redirect('/board');
 		}
 		else 
 		{

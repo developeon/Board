@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Mypage extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->database();
         $this->load->model('user_model');
     }
 
@@ -12,7 +11,6 @@ class Mypage extends MY_Controller {
 	{
         if(!$this->session->userdata('is_login'))
         {
-            $this->load->helper('url');
             $this->session->set_flashdata('message', '잘못된 접근입니다.');
             redirect('/board');
         }
@@ -55,7 +53,6 @@ class Mypage extends MY_Controller {
                 {
                     $this->session->set_flashdata('message', '프로필이 수정되었습니다.');
                 }
-                $this->load->helper('url');
                 redirect('/mypage');
                
         }

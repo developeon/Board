@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Auth extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->database();
         $this->load->model('user_model');
     }
 
@@ -18,7 +17,6 @@ class Auth extends MY_Controller {
         {
             if($this->session->userdata('is_login'))
             {
-                $this->load->helper('url');
                 $this->session->set_flashdata('message', '잘못된 접근입니다.');
                 redirect('/board');
             }
@@ -26,7 +24,7 @@ class Auth extends MY_Controller {
             $this->_header();
             $this->load->library('form_validation');
             $this->form_validation->set_rules('name', '이름', 'required|max_length[20]');
-            $this->form_validation->set_rules('email', '이메일', 'required|valid_email'); //TODO: |is_unique[user.email] 에러(중복안됐는데 중복됐다고 함). 고치기
+            $this->form_validation->set_rules('email', '이메일', 'required|valid_email|is_unique[user.email]');
             $this->form_validation->set_rules('password', '패스워드', 'required|min_length[8]|max_length[20]|matches[re_password]');
             $this->form_validation->set_rules('re_password', '패스워드 확인', 'required');
             if ($this->form_validation->run()===FALSE) 
@@ -43,13 +41,11 @@ class Auth extends MY_Controller {
                 ));
                 if ($result > 0)
                 {
-                    //TODO :alert창 띄우고 로그인페이지로
-                    $this->load->helper('url');
+                    $this->session->set_flashdata('message', '환영합니다.');
                     redirect('/auth/login');
                 }
                 else
                 {
-                    $this->load->helper('url');
                     $this->session->set_flashdata('message', '회원가입에 실패했습니다.');
                     redirect('/auth/join');
                 }
@@ -61,7 +57,6 @@ class Auth extends MY_Controller {
         {
             if($this->session->userdata('is_login'))
             {
-                $this->load->helper('url');
                 $this->session->set_flashdata('message', '잘못된 접근입니다.');
                 redirect('/board');
             }
@@ -72,7 +67,6 @@ class Auth extends MY_Controller {
 
         public function logout(){
             $this->session->sess_destroy();
-            $this->load->helper('url');
             redirect('/');
         }
 
@@ -84,7 +78,6 @@ class Auth extends MY_Controller {
             {
                 $this->session->set_userdata('is_login', true);
                 $this->session->set_userdata('user_id', $this->user_model->getByEmail(array('email'=>$this->input->post('email')))->user_id);
-                $this->load->helper('url');
                 if($this->uri->segment(3,0)=='login') //로그인 페이지에서 로그인한 경우
                 {
                     redirect('/board');
@@ -101,7 +94,6 @@ class Auth extends MY_Controller {
             else
             {
                 $this->session->set_flashdata('message', '로그인에 실패했습니다.');
-                $this->load->helper('url');
                 redirect('/auth/login');
             }
         }
