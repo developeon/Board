@@ -44,17 +44,26 @@
         </thead>
         <tbody>
         <?php
-        foreach ($posts as $post) {
+        if ($posts)
+        {
+            foreach ($posts as $post) {
+                ?>
+                    <tr>
+                        <th scope="row"><?=$post->post_id?></th>
+                        <td class="title"><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
+                        <td><?=$post->user_name?></td>
+                        <td><?=$post->register_date?></td>
+                        <td><?=$post->views?></td>
+                    </tr>
+                <?php
+                } 
+        }
+        else 
+        {
         ?>
-            <tr>
-                <th scope="row"><?=$post->post_id?></th>
-                <td class="title"><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
-                <td><?=$post->user_name?></td>
-                <td><?=$post->register_date?></td>
-                <td><?=$post->views?></td>
-            </tr>
+            <th colspan="5">작성된 게시물이 없습니다.</th>
         <?php
-        } 
+        }
         ?>
         </tbody>
     </table> 

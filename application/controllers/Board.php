@@ -49,20 +49,15 @@ class Board extends MY_Controller {
 
                 $data['posts'] = $this->post_model->gets($config['per_page'], $page);
                 
-                foreach ($data['posts'] as $post)
+                if ($data['posts'])
                 {
-                        $post->user_name = $this->user_model->get($post->user_id)->row()->name;
+                        foreach ($data['posts'] as $post)
+                        {
+                                $post->user_name = $this->user_model->get($post->user_id)->row()->name;
+                        }
                 }
-                if ($data['posts']===FALSE)
-                {
-                        echo "404 Error";
-                        //$this->load->view('');
-                        //TODO: custom 404페이지 생성
-                }
-                else
-                {
-                        $this->load->view('board', $data);
-                }
+               
+                $this->load->view('board', $data);
                 $this->_footer();
         }
 
@@ -135,8 +130,8 @@ class Board extends MY_Controller {
 
         public function update_proc($post_id)
         {
-                checkWriter($data['post']->user_id);
                 $data['post'] = $this->post_model->get($post_id)->row();
+                checkWriter($data['post']->user_id);
                 if (!($this->input->post('title') && $this->input->post('content'))) { //비정상접근 또는 required 삭제 후 접근
                         $this->session->set_flashdata('message', '잘못된 접근입니다.');
                         redirect('/board/update/'.$post_id);
