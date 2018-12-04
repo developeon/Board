@@ -153,5 +153,5 @@ class Board extends MY_Controller {
                 redirect('/board/read/'.$post_id);
         }
 
-        //TDO: 게시물 삭제 함수 생성
+        //TODO: 게시물 삭제 함수 생성
 }

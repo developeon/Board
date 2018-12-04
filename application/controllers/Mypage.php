@@ -9,11 +9,7 @@ class Mypage extends MY_Controller {
 
 	public function index()
 	{
-        if(!$this->session->userdata('is_login'))
-        {
-            $this->session->set_flashdata('message', '잘못된 접근입니다.');
-            redirect('/board');
-        }
+        checkIsLogin();
 
         $data['user'] = $this->user_model->get($this->session->userdata('user_id'))->row();
 
@@ -24,6 +20,8 @@ class Mypage extends MY_Controller {
     
     public function update()
     {
+        checkIsLogin();
+        
         //TODO: 이 모든 작업은 파일 업로드를 했을때만 실행해야함!!!! 그거 체크하기 
         $config['upload_path'] = './includes/img/profile_picture';
         $config['allowed_types'] = 'gif|jpg|png';
