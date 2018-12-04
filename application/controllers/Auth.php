@@ -67,10 +67,9 @@ class Auth extends MY_Controller {
         $this->session->sess_destroy();
         redirect('/');
     }
-    
+
     public function authentication()
     {
-       
         $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
         if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
         {

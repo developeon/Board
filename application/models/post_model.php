@@ -53,4 +53,10 @@ class Post_model extends CI_Model {
         $sql = "UPDATE post set title=?, content=? WHERE post_id=?";
         return $this->db->query($sql, array($titile, $content, $post_id));
     }
+
+    public function delete($post_id)
+    {
+        $this->db->where('post_id', $post_id);
+        return $this->db->delete('post');
+    }
 }

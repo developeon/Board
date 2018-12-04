@@ -117,7 +117,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary">삭제</button>
+                <a href="/board/delete/<?=$post->post_id?>" class="btn btn-primary">삭제</a>
             </div>
         </div>
     </div>

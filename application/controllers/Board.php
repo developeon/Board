@@ -82,6 +82,8 @@ class Board extends MY_Controller {
 
         public function write_comment()
         {
+                //TODO :없는 게시글 번호 입력했을때 DB에 등록되면 안됨!!
+                
                 checkIsLogin();
                 $post_id = $this->input->post('post_id');
                 $content = $this->input->post('content');
@@ -105,6 +107,11 @@ class Board extends MY_Controller {
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
                 $data['post'] = $this->post_model->get($post_id)->row();
+                if (!$data['post'])
+                {
+                        $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
+                        redirect('/board');
+                }
                 $data['post']->user_name = $this->user_model->get($data['post']->user_id)->row()->name;
                 $data['comments'] = $this->comment_model->gets($post_id);
                 $data['count'] = $this->comment_model->getTotalRows($post_id);
@@ -122,6 +129,11 @@ class Board extends MY_Controller {
         public function update($post_id)
         {
                 $data['post'] = $this->post_model->get($post_id)->row();
+                if (!$data['post'])
+                {
+                        $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
+                        redirect('/board');
+                }
                 checkWriter($data['post']->user_id);
                 $this->_header();
                 $this->load->view('update', $data);
@@ -131,6 +143,11 @@ class Board extends MY_Controller {
         public function update_proc($post_id)
         {
                 $data['post'] = $this->post_model->get($post_id)->row();
+                if (!$data['post'])
+                {
+                        $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
+                        redirect('/board');
+                }
                 checkWriter($data['post']->user_id);
                 if (!($this->input->post('title') && $this->input->post('content'))) { //비정상접근 또는 required 삭제 후 접근
                         $this->session->set_flashdata('message', '잘못된 접근입니다.');
@@ -149,4 +166,25 @@ class Board extends MY_Controller {
         }
 
         //TODO: 게시물 삭제 함수 생성
+        public function delete()
+        {
+                $post_id = $this->uri->segment(3);
+                $data['post'] = $this->post_model->get($post_id)->row();
+                if (!$data['post'])
+                {
+                        $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
+                        redirect('/board');
+                }
+                checkWriter($data['post']->user_id);
+                if ($this->post_model->delete($post_id))
+                {
+                        $this->session->set_flashdata('message', '게시글이 삭제되었습니다.'); 
+                        redirect('/board');
+                }
+                else
+                {
+                        $this->session->set_flashdata('message', '게시글 삭제에 실패했습니다.');
+                        redirect('/board/read/'.$post_id);
+                }
+        }
 }
