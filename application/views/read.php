@@ -75,7 +75,15 @@
                             <?php
                             if ($this->session->userdata('user_id') === $comment->user_id)
                             { ?>
-                                <p class="text-right mb-0">수정 | 삭제</p>
+                                <p class="text-right mb-0">
+                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#updateModal"> 
+                                    <!-- TODO: 댓글 수정 modal에 ajax로 댓글 내용 받아와서 출력하기! -->
+                                        수정
+                                    </button>
+                                    <button class="btn btn-default" type="button">
+                                        삭제
+                                    </button>
+                                </p>
                             <?php
                             } ?>
                             </div>
@@ -133,6 +141,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                 <a href="<?=site_url('/board/delete/'.$post->post_id)?>" class="btn btn-primary">삭제</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 댓글 수정 modal -->
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">댓글 수정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <a href="#" class="btn btn-primary">수정완료</a>
             </div>
         </div>
     </div>
