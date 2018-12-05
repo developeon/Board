@@ -13,18 +13,18 @@
 </style>
 <div class="container">
     <div class="d-flex justify-content-end">
-        <form>
+        <form action="<?=site_url('/board')?>" method="post">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <select class="form-control">
-                        <option  value="" selected>제목+내용</option>
-                        <option value="">제목만</option>
-                        <option value="">내용만</option>
-                        <option value="">글 작성자</option>
+                    <select class="form-control" name="search_type">
+                        <option  value="both" selected>제목+내용</option>
+                        <option value="title">제목만</option>
+                        <option value="content">내용만</option>
+                        <option value="user_id">글 작성자</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" name="search_text">
                 </div>
                 <div class="form-group col-md-2">
                     <button type="submit" class="btn btn-primary">검색</button>

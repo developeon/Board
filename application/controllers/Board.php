@@ -44,10 +44,12 @@ class Board extends MY_Controller {
                 $config['attributes'] = array('class' => 'page-link');
 
                 $this->pagination->initialize($config);
-                $page = $this->uri->rsegment(3,0);
                 $data['pagination'] = $this->pagination->create_links();
 
-                $data['posts'] = $this->post_model->gets($config['per_page'], $page);
+                $page = $this->uri->rsegment(3,0);
+                $search_type = $this->input->post('search_type');
+                $search_text = $this->input->post('search_text');
+                $data['posts'] = $this->post_model->gets($config['per_page'], $page, $search_type, $search_text);
                 
                 if ($data['posts'])
                 {

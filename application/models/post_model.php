@@ -5,8 +5,27 @@ class Post_model extends CI_Model {
         parent::_construct();
     }
 
-    public function gets($limit, $start)
+    public function gets($limit, $start, $search_type, $search_text)
     {
+        if ($search_type && $search_text) 
+        {
+            switch ($search_type) {
+                case 'both':
+                    $this->db->like('title', $search_text); 
+                    $this->db->or_like('content', $search_text);
+                    break;
+                case 'title':
+                case 'content':
+                    $this->db->like($search_type, $search_text, 'both');
+                    break;
+                case 'user_id':
+                    //TODO: case는 user_id지만 유저가 검색한건 name. 
+                    // name like '%?%' 해서 얻은 id들 모두 select * from post where user_id like in(id들) 이런식으로 해야할듯. 아니면 조인하거나
+                default:
+                    break;
+            }
+        }
+
         $this->db->order_by('post_id', 'desc');
         $this->db->limit($limit, $start);
         $query = $this->db->get('post');
