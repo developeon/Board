@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="/board/update_proc/<?=$post->post_id?>" method="post">
+    <form action="<?=site_url('/board/update_proc/'.$post->post_id)?>" method="post">
         <div class="form-group">
             <input type="text" class="form-control" name="title" placeholder="제목을 작성해주세요." value="<?=$post->title?>" required>
         </div>

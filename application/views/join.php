@@ -5,7 +5,7 @@
   }
 </style>
   
-  <form class="form-sign" actoin="/auth/join" method="post">
+  <form class="form-sign" action="<?=site_url('/auth/join');?>" method="post">
     <h1 class="h3 mb-3 font-weight-normal">반갑습니다!</h1>
     <?php echo "<p>".validation_errors()."</p>"; ?>
     <div class="form-group">

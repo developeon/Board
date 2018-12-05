@@ -25,7 +25,7 @@
             <?php
             if ($this->session->userdata('user_id') === $post->user_id)
             { ?>
-                <a href="/board/update/<?=$post->post_id?>" class="btn btn-primary">수정</a>
+                <a href="<?=site_url('/board/update/'.$post->post_id)?>" class="btn btn-primary">수정</a>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
                     삭제
                 </button>
@@ -34,7 +34,7 @@
             </p>
         </div>
         <div class="card-footer text-muted">
-            <form action="/board/write_comment" method="post">
+            <form action="<?=site_url('/board/write_comment')?>" method="post">
                 <input type="hidden" name="post_id" value="<?=$post->post_id?>">
                 <div class="row" style="margin-bottom: 1rem;">
                     <div class="col-10">
@@ -69,7 +69,17 @@
                 <div class="media">
                     <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$comment->user_profile_picture?>" alt="profile picture" style="width:48px;height:48px;">
                     <div class="media-body" style="text-align: left;">
-                        <h6 class="mt-0" style="margin-bottm: 0;"><a href=""><?=$comment->user_name?></a> | <?=$comment->register_date?></h6>
+                        <div class="row">
+                            <div class="col-10"><h6 class="mt-0" style="margin-bottm: 0;"><a href="#"><?=$comment->user_name?></a> | <?=$comment->register_date?></h6></div>
+                            <div class="col-2">
+                            <?php
+                            if ($this->session->userdata('user_id') === $comment->user_id)
+                            { ?>
+                                <p class="text-right mb-0">수정 | 삭제</p>
+                            <?php
+                            } ?>
+                            </div>
+                        </div>
                         <?=$comment->content?>
                     </div>
                 </div>
@@ -93,7 +103,7 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form action="/auth/authentication/comment/<?=$post->post_id?>" method="post">
+                <form action="<?=site_url('/auth/authentication/comment/'.$post->post_id)?>" method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="이메일" name="email">
                     </div>
@@ -122,7 +132,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <a href="/board/delete/<?=$post->post_id?>" class="btn btn-primary">삭제</a>
+                <a href="<?=site_url('/board/delete/'.$post->post_id)?>" class="btn btn-primary">삭제</a>
             </div>
         </div>
     </div>

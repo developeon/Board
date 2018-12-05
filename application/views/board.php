@@ -50,7 +50,7 @@
                 ?>
                     <tr>
                         <th scope="row"><?=$post->post_id?></th>
-                        <td class="title"><a href="/board/read/<?=$post->post_id?>" target="_blank"><?=$post->title?></a></td>
+                        <td class="title"><a href="<?=site_url('/board/read/'.$post->post_id)?>" target="_blank"><?=$post->title?></a></td>
                         <td><?=$post->user_name?></td>
                         <td><?=$post->register_date?></td>
                         <td><?=$post->views?></td>
@@ -71,7 +71,7 @@
     <?php
     if ($this->session->userdata('is_login'))
     { ?>
-        <a href="/board/write" class="btn btn-primary">글쓰기</a>
+        <a href="<?=site_url('/board/write')?>" class="btn btn-primary">글쓰기</a>
     <?php
     }
     else
@@ -101,7 +101,7 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form action="/auth/authentication/post" method="post">
+                <form action="<?=site_url('/auth/authentication/post')?>" method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="이메일" name="email">
                     </div>

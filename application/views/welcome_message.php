@@ -56,8 +56,8 @@ body {
         <ul class="navbar-nav mr-auto">
         </ul>
         <form class="form-inline mt-2 mt-md-0">
-            <a class="nav-link" href="/auth/login">로그인</a>
-            <a class="nav-link" href="/auth/join">회원가입</a>
+            <a class="nav-link" href="<?=site_url('/auth/login')?>">로그인</a>
+            <a class="nav-link" href="<?=site_url('/auth/join')?>">회원가입</a>
         </form>
       </div>
 	  </div>
@@ -70,8 +70,8 @@ body {
 				<div class="col col-lg-2">
 				</div>
 				<div class="col-md-auto">
-					<a href="/auth/login" class="btn btn-primary btn-lg">로그인</a>
-					<a href="/auth/join" class="btn btn-secondary btn-lg">EMAIL로 회원가입</a>
+					<a href="<?=site_url('/auth/login')?>" class="btn btn-primary btn-lg">로그인</a>
+					<a href="<?=site_url('/auth/join')?>" class="btn btn-secondary btn-lg">EMAIL로 회원가입</a>
 				</div>
 				<div class="col col-lg-2">
 				</div>

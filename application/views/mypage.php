@@ -35,7 +35,7 @@
         <h3 class="m-0">프로필 수정</h3>
         </div>
         <div class="card-body">
-            <form action="/mypage/update" method="post" enctype="multipart/form-data">
+            <form action="<?=site_url('/mypage/update')?>" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-lg-4 text-center" style="padding: 1rem;">
                         <img src="/includes/img/profile_picture/<?=$user->profile_picture?>" class="rounded-circle profile-page" alt="profile picture">
