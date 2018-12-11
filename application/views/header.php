@@ -47,7 +47,7 @@
                         { ?>
                             
                             <a class="dropdown-item" href="<?=site_url('/board')?>"><img src="/includes/img/material_icons/edit.svg" alt="" style="width:18px;"> 게시물 보기</a>
-                            <a class="dropdown-item" href="#"><img src="/includes/img/material_icons/dashboard.svg" alt="" style="width:18px;"> 나의 활동</a>
+                            <a class="dropdown-item" href="<?=site_url('/profile')?>/<?=$this->session->userdata('user_id')?>"><img src="/includes/img/material_icons/dashboard.svg" alt="" style="width:18px;"> 나의 활동</a>
                             <a class="dropdown-item" href="<?=site_url('/mypage')?>"><img src="/includes/img/material_icons/face.svg" alt="" style="width:18px;"> 내 정보 관리</a>
                             <a class="dropdown-item" href="<?=site_url('/auth/logout')?>"><img src="/includes/img/material_icons/logout.svg" alt="" style="width:18px;"> 로그아웃</a>
                         <?php

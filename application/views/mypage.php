@@ -53,7 +53,7 @@
                         <div class="form-group row">
                             <label for="register_date" class="col-sm-2 col-form-label">가입일</label>
                             <div class="col-sm-10">
-                                <div class="form-control"><?=$user->register_date?></div>
+                                <div class="form-control text-muted"><?=$user->register_date?></div>
                             </div>
                         </div>
                         <div class="form-group row">
