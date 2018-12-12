@@ -27,7 +27,18 @@ class Profile extends MY_Controller {
     {
         $this->load->model('post_model');
 
-        echo $this->input->post('user_id');
+        //echo $this->input->post('user_id');
         //TODO: user_id에 맞는 post 모두 출력!
+        //페이징 관련 config가 덮어쓰는거랬는데 이거 깊게 파보기
+        $result = $this->post_model->getsById($this->input->post('user_id'));
+        echo json_encode($result);
+    }
+
+    public function getComments()
+    {
+        $this->load->model('comment_model');
+
+        $result = $this->comment_model->getsById($this->input->post('user_id'));
+        echo json_encode($result);
     }
 }

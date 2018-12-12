@@ -39,6 +39,19 @@ class Post_model extends CI_Model {
         }
     }
 
+    public function getsById($user_id)
+    {
+        $query = $this->db->get_where('post', array('user_id' => $user_id));
+        if ($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            false;
+        }
+    }
+
     public function getTotalRows()
     {
         $query = $this->db->query('SELECT * FROM post');

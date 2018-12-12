@@ -17,6 +17,19 @@ class Comment_model extends CI_Model {
             return false;
         }
     }
+
+    public function getsById($user_id)
+    {
+        $query = $this->db->get_where('comment', array('user_id' => $user_id));
+        if ($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
     
     public function write($content, $post_id, $user_id)
     {
