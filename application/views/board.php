@@ -51,7 +51,7 @@
                     <tr>
                         <th scope="row"><?=$post->post_id?></th>
                         <td class="title"><a href="<?=site_url('/board/read/'.$post->post_id)?>" target="_blank"><?=$post->title?></a></td>
-                        <td><?=$post->user_name?></td>
+                        <td><a href="<?=site_url('/profile')?>/<?=$post->user_id?>"><?=$post->user_name?></a></td>
                         <td><?=$post->register_date?></td>
                         <td><?=$post->views?></td>
                     </tr>

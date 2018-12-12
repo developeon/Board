@@ -19,7 +19,8 @@
         <div class="card-body">
             <p class="text-left">
                 <img class="mr-1 rounded-circle" src="/includes/img/profile_picture/<?=$post->user_profile_picture?>" alt="profile picture" style="width:32px;height:32px;">
-                <a href="#"><?=$post->user_name?></a></p>
+                <a href="<?=site_url('/profile')?>/<?=$post->user_id?>"><?=$post->user_name?></a>
+            </p>
             <p class="text-left"><?=$post->content?></p>
             <p class="text-right">
             <?php
@@ -70,7 +71,11 @@
                     <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$comment->user_profile_picture?>" alt="profile picture" style="width:48px;height:48px;">
                     <div class="media-body" style="text-align: left;">
                         <div class="row">
-                            <div class="col-10"><h6 class="mt-0" style="margin-bottm: 0;"><a href="#"><?=$comment->user_name?></a> | <?=$comment->register_date?></h6></div>
+                            <div class="col-10">
+                                <h6 class="mt-0" style="margin-bottm: 0;">
+                                    <a href="<?=site_url('/profile')?>/<?=$comment->user_id?>"><?=$comment->user_name?></a> | <?=$comment->register_date?>
+                                </h6>
+                            </div>
                             <div class="col-2">
                             <?php
                             if ($this->session->userdata('user_id') === $comment->user_id)

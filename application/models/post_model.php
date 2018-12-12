@@ -48,7 +48,7 @@ class Post_model extends CI_Model {
         }
         else
         {
-            false;
+            return false;
         }
     }
 
