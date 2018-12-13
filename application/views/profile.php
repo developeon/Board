@@ -1,10 +1,11 @@
 <div class="container">
-    <div class="jumbotron">
+    <div class="jumbotron" style="padding: 2rem 2rem;">
         <div class="media">
-            <img class="mr-3" src=".../64x64" alt="Generic placeholder image">
+            <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$user[0]->profile_picture?>" alt="profile picture" style="width:120px;height:120px;">
             <div class="media-body">
-                <h5 class="mt-0">이름</h5>
-                리스트
+                <h5 class="mt-0"><?=$user[0]->name?></h5>
+                총 게시글 <?=$count['post']?>개 | 총 댓글 <?=$count['comment']?>개 
+                <?php if ($this->session->userdata('user_id')=== $user[0]->user_id) echo "| 총 북마크수 N개"; ?>
             </div>
         </div>
     </div>
@@ -16,9 +17,15 @@
         <li class="nav-item">
             <button class="nav-link" id="comment" onclick="showComment()">댓글</button>
         </li>
+<?php
+    if ($this->session->userdata('user_id')=== $user[0]->user_id)
+    { ?>
         <li class="nav-item">
             <button class="nav-link" id="bookmark">북마크</button>
         </li>
+<?php 
+    } ?>
+        
     </ul>
     <table class="table">
         <thead>
@@ -53,7 +60,7 @@
         $.ajax({
             url: '/profile/getPosts',
             type: 'POST',
-            data: { user_id: <?=$user_id?>},
+            data: { user_id: <?=$user[0]->user_id?>},
             dataType: 'json',
             error: function() {
                 alert('Something is wrong');
@@ -81,7 +88,7 @@
                     html += `
                         <tr>
                             <th scope="row">${data[i].post_id}</th>
-                            <td>${data[i].title}</td>
+                            <td><a href="<?=site_url('/board/read/')?>${data[i].post_id}" target="_blank">${data[i].title}</a></td>
                             <td>${data[i].register_date}</td>
                             <td>${data[i].views}</td>
                         </tr>
@@ -99,7 +106,7 @@
         $.ajax({
             url: '/profile/getComments',
             type: 'POST',
-            data: { user_id: <?=$user_id?>},
+            data: { user_id: <?=$user[0]->user_id?>},
             dataType: 'json',
             error: function() {
                 alert('Something is wrong');
@@ -120,14 +127,13 @@
                     `);
                     return false;
                 }
-                console.log("여기로옴");
                 var html = '';
                 for (i=0; i<data.length; i++)
                 {
                     html += `
                         <tr>
                             <th scope="row">${data[i].comment_id}</th>
-                            <td>${data[i].content}</td>
+                            <td><a href="<?=site_url('/board/read/')?>${data[i].post_id}" target="_blank">${data[i].content}</a></td>
                             <td>${data[i].register_date}</td>
                         </tr>
                     `;

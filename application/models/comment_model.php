@@ -46,4 +46,17 @@ class Comment_model extends CI_Model {
         $query = $this->db->get_where('comment', array('post_id'=>$post_id));
         return $query->num_rows();
     }
+
+    public function getCount($user_id)
+    {
+        $query = $this->db->get_where('comment', array('user_id' => $user_id));
+        if ($query->num_rows() > 0)
+        {
+            return $query->num_rows();
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

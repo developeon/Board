@@ -5,20 +5,26 @@ class Profile extends MY_Controller {
     public function index()
 	{
         $this->load->model('user_model');
+        $this->load->model('post_model');
+        $this->load->model('comment_model');
 
         $this->_header();
 
-        $data['user_id'] = $this->uri->rsegment(3, 0);
-        if ($this->user_model->get($data['user_id'])->num_rows() > 0)
-        {
-            $this->load->view('profile', $data);
-        }
-        else
+        $user_id = $this->uri->rsegment(3, 0);
+        $query = $this->user_model->get($user_id);
+        if ($query->num_rows() < 1)
         {
             $this->session->set_flashdata('message', '접근 권한이 없습니다.');
             $this->load->helper('url');
             redirect('/');
+            
         }
+        $data['user'] = $query->result();
+        $post_count = $this->post_model->getCount($user_id);
+        $comment_count = $this->comment_model->getCount($user_id);
+        $data['count'] = array("post" => $post_count, "comment" => $comment_count);
+        
+        $this->load->view('profile', $data);
 
         $this->_footer();
     }
