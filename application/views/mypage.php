@@ -35,12 +35,12 @@
         <h3 class="m-0">프로필 수정</h3>
         </div>
         <div class="card-body">
-            <form action="<?=site_url('/mypage/update')?>" method="post" enctype="multipart/form-data">
+            <form id="form1" action="<?=site_url('/mypage/update')?>" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-lg-4 text-center" style="padding: 1rem;">
-                        <img src="/includes/img/profile_picture/<?=$user->profile_picture?>" class="rounded-circle profile-page" alt="profile picture">
+                        <img id="blah" src="/includes/img/profile_picture/<?=$user->profile_picture?>" class="rounded-circle profile-page" alt="profile picture">
                         <span class="btn btn-primary btn-file">
-                            바꾸기 <input type="file" name="profile_picture">
+                            바꾸기 <input id="imgInp" type="file" name="profile_picture">
                         </span>
                     </div>
                     <div class="col-lg-8">
@@ -82,6 +82,26 @@
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- Google CDN -->
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script> <!-- Microsoft CDN -->
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#imgInp").change(function(){
+        readURL(this);
+    });
+</script>
 
 <?php
   if ($this->session->flashdata('message'))
