@@ -200,4 +200,14 @@ class Board extends MY_Controller {
                         redirect('/board/read/'.$post_id);
                 }
         }
+
+        public function deleteComment()
+        {
+                //TODO: 댓글 작성자가 맞는지 확인
+                $this->load->model('comment_model');
+
+                $comment_id = $this->input->post('comment_id');
+                $result = $this->comment_model->delete($comment_id);
+                echo $result;
+        }
 }

@@ -59,4 +59,10 @@ class Comment_model extends CI_Model {
             return 0;
         }
     }
+
+    public function delete($comment_id)
+    {
+        $this->db->where('comment_id', $comment_id);
+        return $this->db->delete('comment');
+    }
 }

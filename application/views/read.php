@@ -126,10 +126,10 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script> <!-- Microsoft CDN -->
 <script>
     $(document).ready(function(){
-        readCommet();
+        readComment();
     });
-
-    function readCommet() {
+    
+    function readComment() {
         $.ajax({
             url: '/board/readComment',
             type: 'POST',
@@ -139,7 +139,9 @@
                 alert('댓글 정보를 불러오지 못했습니다.');
             },
             success: function(data) {
+                var user_id = <?=$this->session->userdata('user_id')?>;
                 var html = '';
+                if (data['count'] > 0) {
                 data['comments'].forEach(function(comment) {
                     html += `
                         <div class="media">
@@ -152,7 +154,11 @@
                                         </h6>
                                     </div>
                                     <div class="col-2 text-right">
-                                        <span style="cursor: pointer;">X</span>
+                                        
+                    `;
+                    if(user_id === Number(comment.user_id))
+                        html += `<span style="cursor: pointer;" onclick="deleteComment(${comment.comment_id});">X</span>`;
+                    html += `
                                     </div>
                                 </div>
                                 ${comment.content}
@@ -161,7 +167,29 @@
                     `;
                 });
                 $("#comments").html(html);
+                } else {
+                    $("#comments").html('작성된 댓글이 없습니다.');
+                }
                 $('#count').html(data['count']);
+            }
+        });
+    }
+
+    function deleteComment(comment_id) {
+        $.ajax({
+            url: '/board/deleteComment',
+            type: 'POST',
+            data: { comment_id: comment_id},
+            error: function() {
+                alert('댓글을 삭제하지 못했습니다.');
+            },
+            success: function(data) {
+                if(!data) {
+                    alert('댓글을 삭제하지 못했습니다.');
+                } else {
+                    alert('댓글이 삭제되었습니다.');
+                    readComment();
+                }
             }
         });
     }
