@@ -4,7 +4,7 @@ class Comment_model extends CI_Model {
     {
         parent::_construct();
     }
-
+    
     public function gets($post_id)
     {
         $query = $this->db->order_by('comment_id', 'desc')->get_where('comment', array('post_id'=>$post_id));

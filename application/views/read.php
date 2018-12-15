@@ -22,17 +22,26 @@
                 <a href="<?=site_url('/profile')?>/<?=$post->user_id?>"><?=$post->user_name?></a>
             </p>
             <p class="text-left"><?=$post->content?></p>
-            <p class="text-right">
-            <?php
-            if ($this->session->userdata('user_id') === $post->user_id)
-            { ?>
-                <a href="<?=site_url('/board/update/'.$post->post_id)?>" class="btn btn-primary">수정</a>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
-                    삭제
-                </button>
-            <?php
-            } ?>
-            </p>
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <button type="button" class="btn btn-warning"><img src="/includes/img/material_icons/bookmark.svg"></button>
+                    <button type="button" class="btn btn-warning"><img src="/includes/img/material_icons/bookmark_border.svg"></button>
+                    <!-- TODO: 북마크되어있으면 bookmark, 아니면 bookmark_border -->
+                </div>
+                <div class="col-sm text-right">
+                <?php
+                if ($this->session->userdata('user_id') === $post->user_id)
+                { ?>
+                    <a href="<?=site_url('/board/update/'.$post->post_id)?>" class="btn btn-primary">수정</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+                        삭제
+                    </button>
+                <?php
+                } ?>
+                </div>
+            </div>
         </div>
         <div class="card-footer text-muted">
             <form action="<?=site_url('/board/write_comment')?>" method="post">
@@ -59,48 +68,10 @@
                 </div>
             </form>
             <p class="text-left">
-                <b>댓글 (<?=$count?>) | 조회수 (<?=$post->views?>)</b>
+                <b>댓글 (<span id="count">0</span>) | 조회수 (<?=$post->views?>)</b>
             </p>
             <hr/>
-            <?php
-            if ($comments)
-            {
-                foreach ($comments as $comment) {
-            ?>
-                <div class="media">
-                    <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$comment->user_profile_picture?>" alt="profile picture" style="width:48px;height:48px;">
-                    <div class="media-body" style="text-align: left;">
-                        <div class="row">
-                            <div class="col-10">
-                                <h6 class="mt-0" style="margin-bottm: 0;">
-                                    <a href="<?=site_url('/profile')?>/<?=$comment->user_id?>"><?=$comment->user_name?></a> | <?=$comment->register_date?>
-                                </h6>
-                            </div>
-                            <div class="col-2">
-                            <?php
-                            if ($this->session->userdata('user_id') === $comment->user_id)
-                            { ?>
-                                <p class="text-right mb-0">
-                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#updateModal"> 
-                                    <!-- TODO: 댓글 수정 modal에 ajax로 댓글 내용 받아와서 출력하기! -->
-                                        수정
-                                    </button>
-                                    <button class="btn btn-default" type="button">
-                                        삭제
-                                    </button>
-                                </p>
-                            <?php
-                            } ?>
-                            </div>
-                        </div>
-                        <?=$comment->content?>
-                    </div>
-                </div>
-            <?php
-                }
-            }
-            ?>
-              
+            <div id="comments">댓글을 불러오는 중입니다.</div>
         </div>
     </div>
 </div>
@@ -151,26 +122,50 @@
     </div>
 </div>
 
-<!-- 댓글 수정 modal -->
-<div class="modal fade" id="updateModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">댓글 수정</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <textarea></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <a href="#" class="btn btn-primary">수정완료</a>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- Google CDN -->
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script> <!-- Microsoft CDN -->
+<script>
+    $(document).ready(function(){
+        readCommet();
+    });
+
+    function readCommet() {
+        $.ajax({
+            url: '/board/readComment',
+            type: 'POST',
+            data: { post_id: <?=$post->post_id?> },
+            dataType: 'json',
+            error: function() {
+                alert('댓글 정보를 불러오지 못했습니다.');
+            },
+            success: function(data) {
+                var html = '';
+                data['comments'].forEach(function(comment) {
+                    html += `
+                        <div class="media">
+                            <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/${comment.user_profile_picture}" alt="profile picture" style="width:48px;height:48px;">
+                            <div class="media-body" style="text-align: left;">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h6 class="mt-0" style="margin-bottm: 0;">
+                                            <a href="/profile/${comment.user_id}">${comment.user_name}</a> | ${comment.register_date}
+                                        </h6>
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        <span style="cursor: pointer;">X</span>
+                                    </div>
+                                </div>
+                                ${comment.content}
+                            </div>
+                        </div>
+                    `;
+                });
+                $("#comments").html(html);
+                $('#count').html(data['count']);
+            }
+        });
+    }
+</script>
 
 <?php
   if ($this->session->flashdata('message'))

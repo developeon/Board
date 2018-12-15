@@ -114,11 +114,19 @@ class Board extends MY_Controller {
                         $this->session->set_flashdata('message', '존재하지 않는 게시글입니다.');
                         redirect('/board');
                 }
-
                 $post_data = $this->user_model->get($data['post']->user_id)->row();
                 $data['post']->user_name = $post_data->name;
                 $data['post']->user_profile_picture = $post_data->profile_picture;
+                
+                $this->load->view('read', $data);
+                $this->_footer();
+        }
 
+        public function readComment()
+        {
+                $this->load->model('comment_model');
+
+                $post_id = $this->input->post('post_id');
                 $data['comments'] = $this->comment_model->gets($post_id);
                 $data['count'] = $this->comment_model->getTotalRows($post_id);
                 if ($data['comments'])
@@ -129,9 +137,7 @@ class Board extends MY_Controller {
                                 $comment->user_profile_picture = $comment_data->profile_picture;
                         }
                 }
-                
-                $this->load->view('read', $data);
-                $this->_footer();
+                echo json_encode($data);
         }
 
         public function update($post_id)
@@ -173,7 +179,6 @@ class Board extends MY_Controller {
                 redirect('/board/read/'.$post_id);
         }
 
-        //TODO: 게시물 삭제 함수 생성
         public function delete()
         {
                 $post_id = $this->uri->segment(3);

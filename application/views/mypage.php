@@ -61,7 +61,7 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요" value="<?=$user->email?>">
                                 <p class="text-muted" style="margin-top: 0.5rem;margin-bottom: 0.5rem;"><small>이메일 인증 후 글쓰기, 댓글달기 기능을 이용하실 수 있습니다.</small></p>
-                                <button class="btn btn-primary" type="button">인증하기</button>
+                                <button id="auth" class="btn btn-primary" type="button">인증하기</button>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -100,6 +100,11 @@
 
     $("#imgInp").change(function(){
         readURL(this);
+    });
+
+    $( "#auth" ).click(function() {
+        //TODO: controller에서 sendEmail 함수 만들고 거기서는 인증번호 발생, 메일 전송 작업 진행. 그리고 메일 전송이 성공적으로 되면(success(data)) 
+        //인증번호를 입력하세요라는 modal창 띄움. 인증번호를 입력하면 checkNumber 함수에 갔다오고 success면 인증 완료로 바꿈
     });
 </script>
 
