@@ -4,11 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Mypage extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model('user_model');
     }
 
 	public function index()
 	{
+        $this->load->model('user_model');
+
         checkIsLogin();
 
         $data['user'] = $this->user_model->get($this->session->userdata('user_id'))->row();
@@ -20,6 +21,8 @@ class Mypage extends MY_Controller {
     
     public function update()
     {
+        $this->load->model('user_model');
+
         checkIsLogin();
         
         //TODO: 이 모든 작업은 파일 업로드를 했을때만 실행해야함!!!! 그거 체크하기 
@@ -54,5 +57,17 @@ class Mypage extends MY_Controller {
                 redirect('/mypage');
                
         }
+    }
+
+    public function sendEmail()
+    {
+        $this->load->model('email_auth_model');
+        
+        $email_hash = password_hash($this->input->post('email'), PASSWORD_BCRYPT);
+        $expired_time = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+        $user_id = $this->input->post('user_id');
+
+        $result = $this->email_auth_model->insert($email_hash, $expired_time, $user_id);
+        //TODO: DB insert 에러 처리 후 메일 발송
     }
 }

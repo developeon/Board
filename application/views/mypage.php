@@ -86,25 +86,43 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <!-- Google CDN -->
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script> <!-- Microsoft CDN -->
 <script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    $(document).ready(function(){
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#blah').attr('src', e.target.result);
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
             }
-
-            reader.readAsDataURL(input.files[0]);
         }
-    }
 
-    $("#imgInp").change(function(){
-        readURL(this);
-    });
-
-    $( "#auth" ).click(function() {
+        $("#imgInp").change(function(){
+            readURL(this);
+        });
+    
+        $( "#auth" ).click(function() {
         //TODO: controller에서 sendEmail 함수 만들고 거기서는 인증번호 발생, 메일 전송 작업 진행. 그리고 메일 전송이 성공적으로 되면(success(data)) 
         //인증번호를 입력하세요라는 modal창 띄움. 인증번호를 입력하면 checkNumber 함수에 갔다오고 success면 인증 완료로 바꿈
+        $.ajax({
+            url: '/mypage/sendEmail',
+            type: 'POST',
+            data: {
+                user_id: <?=$user->user_id?>,
+                user_email: <?="'".$user->email."'"?>
+            },
+            dataType: 'json',
+            error: function() {
+                alert('Something is wrong');
+            },
+            success: function(data) {
+                alert(data);
+            }
+        });
+    });
+    
     });
 </script>
 
