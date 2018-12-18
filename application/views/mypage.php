@@ -104,6 +104,7 @@
         });
     
         $( "#auth" ).click(function() {
+            var email = $('#email').val();
         //TODO: controller에서 sendEmail 함수 만들고 거기서는 인증번호 발생, 메일 전송 작업 진행. 그리고 메일 전송이 성공적으로 되면(success(data)) 
         //인증번호를 입력하세요라는 modal창 띄움. 인증번호를 입력하면 checkNumber 함수에 갔다오고 success면 인증 완료로 바꿈
         $.ajax({
@@ -111,14 +112,22 @@
             type: 'POST',
             data: {
                 user_id: <?=$user->user_id?>,
-                user_email: <?="'".$user->email."'"?>
+                email: email
             },
             dataType: 'json',
-            error: function() {
+            error: function(e) {
+                console.log(e);
                 alert('Something is wrong');
             },
             success: function(data) {
-                alert(data);
+                if (data ==='success') 
+                {
+                    alert(`${email}로 이메일을 보냈습니다. 확인 해보시겠어요?`);
+                }
+                else
+                {
+                    alert('이메일 전송에 실패했습니다. 다시 시도해주세요.');
+                }
             }
         });
     });
