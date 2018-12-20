@@ -5,7 +5,6 @@
             <div class="media-body">
                 <h5 class="mt-0"><?=$user[0]->name?></h5>
                 총 게시글 <?=$count['post']?>개 | 총 댓글 <?=$count['comment']?>개 
-                <?php if ($this->session->userdata('user_id')=== $user[0]->user_id) echo "| 총 북마크수 N개"; ?>
             </div>
         </div>
     </div>
@@ -17,15 +16,6 @@
         <li class="nav-item">
             <button class="nav-link" id="comment" onclick="showComment()">댓글</button>
         </li>
-<?php
-    if ($this->session->userdata('user_id')=== $user[0]->user_id)
-    { ?>
-        <li class="nav-item">
-            <button class="nav-link" id="bookmark">북마크</button>
-        </li>
-<?php 
-    } ?>
-        
     </ul>
     <table class="table">
         <thead>

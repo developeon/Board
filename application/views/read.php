@@ -23,14 +23,7 @@
             </p>
             <p class="text-left"><?=$post->content?></p>
             <div class="row">
-                <div class="col-sm">
-                </div>
-                <div class="col-sm">
-                    <button type="button" class="btn btn-warning"><img src="/includes/img/material_icons/bookmark.svg"></button>
-                    <button type="button" class="btn btn-warning"><img src="/includes/img/material_icons/bookmark_border.svg"></button>
-                    <!-- TODO: 북마크되어있으면 bookmark, 아니면 bookmark_border -->
-                </div>
-                <div class="col-sm text-right">
+                <div class="col text-right">
                 <?php
                 if ($this->session->userdata('user_id') === $post->user_id)
                 { ?>
