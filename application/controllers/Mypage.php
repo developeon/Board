@@ -79,7 +79,7 @@ class Mypage extends MY_Controller {
             'smtp_host' => "ssl://smtp.gmail.com",
             'smtp_port' => "465",//"587", // 465 나 587 중 하나를 사용
             'smtp_user' => "your email",
-            'smtp_pass' => "your password!",
+            'smtp_pass' => "your password",
             'charset' => "utf-8",
             'mailtype' => "html",
             'smtp_timeout' => 10,
@@ -136,12 +136,11 @@ class Mypage extends MY_Controller {
             $now = date("Y-m-d H:i:s");
             if (strtotime($expired_time)-strtotime($now) > 0)
             {
-                //TODO: email_auth에서 컬럼 삭제하기(삭제 타이밍도 고민)
                 //TODO: 모든 기기에서 로그아웃하기
                 $current_user = $this->session->userdata('user_id');
                 if ($this->user_model->get($result->user_id)->row()->user_id === $current_user)
                 {
-                    if ($this->user_model->updateEmailChecked($current_user) > 0)
+                    if ($this->user_model->updateEmailStatus($current_user, $result->email) > 0)
                     {
                         echo "<script>
                         alert('이메일이 변경되었습니다. 로그인 되어있는 다른 기기들에서 모두 로그아웃 되었습니다.');

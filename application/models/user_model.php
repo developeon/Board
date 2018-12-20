@@ -26,16 +26,10 @@ class User_model extends CI_Model {
         return $this->db->get_where('user', array('user_id' => $user_id));
     }
 
-    // function updateProfilePicture($file_name)
-    // {
-        
-    //     $sql = "UPDATE user set profile_picture=? WHERE user_id=?";
-    //     return $this->db->query($sql, array($file_name, $this->session->userdata('user_id')));
-    // }
-
-    function updateEmailChecked($user_id)
+    function updateEmailStatus($user_id, $email)
     {
         $data = array(
+            'email'=>$email,
             'email_checked'=>1
         );
         $this->db->update('user', $data, 'user_id='.$user_id);
@@ -60,7 +54,4 @@ class User_model extends CI_Model {
         );
         return $this->db->update('user', $data, 'user_id='.$user_id);
     }
-
-    
-    
 }

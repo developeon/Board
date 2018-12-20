@@ -36,8 +36,20 @@
         </div>
         <div class="card-body">
             <input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요" value="<?=$user->email?>">
-            <p class="text-muted" style="margin-top: 0.5rem;margin-bottom: 0.5rem;"><small>이메일 인증 후 글쓰기, 댓글달기 기능을 이용하실 수 있습니다.</small></p>
-            <button id="auth" class="btn btn-primary" type="button">인증하기</button>
+            <?php
+            if ($user->email_checked)
+            { ?>
+                <p class="text-muted" style="margin-top: 0.5rem;margin-bottom: 0.5rem;"><small><?=$user->email?>로 인증 되어 있습니다. 변경하시려는 이메일 주소를 작성 후 버튼을 눌러주세요.</small></p>
+                <button id="auth" class="btn btn-primary" type="button">변경하기</button>
+            <?php
+            }
+            else
+            { ?>
+
+                <p class="text-muted" style="margin-top: 0.5rem;margin-bottom: 0.5rem;"><small>이메일 인증 후 글쓰기, 댓글달기 기능을 이용하실 수 있습니다.</small></p>
+                <button id="auth" class="btn btn-primary" type="button">인증하기</button>
+            <?php
+            } ?>
         </div>
     </div> <!-- 이메일 인증 -->
     <br/>
@@ -113,8 +125,7 @@
                     email: email
                 },
                 dataType: 'json',
-                error: function(e) {
-                    console.log(e);
+                error: function() {
                     alert('Something is wrong');
                 },
                 success: function(data) {
