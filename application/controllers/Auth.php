@@ -4,16 +4,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Auth extends MY_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model('user_model');
     }
 
     public function index()	
     {
-        //TODO: 로그인, 회원가입 유도 화면 출력
+        //TODO: 로그인, 회원가입으로 이동가능한 화면 출력
     }
 
     public function join()
     {
+        $this->load->model('user_model');
+
         if($this->session->userdata('is_login'))
         {
             $this->session->set_flashdata('message', '잘못된 접근입니다.');
@@ -51,7 +52,7 @@ class Auth extends MY_Controller {
         $this->_footer();
     }
 
-    public function login()
+    public function login() //로그인 화면 출력 
     {
         if($this->session->userdata('is_login'))
         {
@@ -68,8 +69,10 @@ class Auth extends MY_Controller {
         redirect('/');
     }
 
-    public function authentication()
+    public function authentication() //로그인 처리
     {
+        $this->load->model('user_model');
+        
         $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
         if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
         {

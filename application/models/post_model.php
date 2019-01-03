@@ -16,11 +16,10 @@ class Post_model extends CI_Model {
                     break;
                 case 'title':
                 case 'content':
-                    $this->db->like($search_type, $search_text, 'both');
+                    $this->db->like($search_type, $search_text);
                     break;
                 case 'user_id':
-                    //TODO: case는 user_id지만 유저가 검색한건 name. 
-                    // name like '%?%' 해서 얻은 id들 모두 select * from post where user_id like in(id들) 이런식으로 해야할듯. 아니면 조인하거나
+                    $this->db->where('user_id', $search_text);
                 default:
                     break;
             }
@@ -88,15 +87,25 @@ class Post_model extends CI_Model {
 
     public function increaseViews($post_id)
     {
-        $sql = 'update post set views=views+1 where post_id='.$post_id;
-        $this->db->query($sql);
+       // $sql = 'update post set views=views+1 where post_id='.$post_id;
+        //$this->db->query($sql);
+        $this->db->where('post_id', $post_id);
+        $this->db->set('views', 'views+1', FALSE); //FALSE로 하면 쿼리를 자동으로 이스케이프 하지 않음. 
+        // TRUE일 경우 INSERT INTO post (views) VALUES ('views+1')
+        // FALSE일 경우 INSERT INTO post (views) VALUES (views+1)
+        $this->db->update('post');
     }
 
     public function update($post_id, $titile, $content)
     {
-        
-        $sql = "UPDATE post set title=?, content=? WHERE post_id=?";
-        return $this->db->query($sql, array($titile, $content, $post_id));
+        //$sql = "UPDATE post set title=?, content=? WHERE post_id=?";
+        //return $this->db->query($sql, array($titile, $content, $post_id));
+        $data = array(
+            'title'=>$titile,
+            'content'=>$content
+        );
+        $this->db->update('post', $data, 'post_id='.$post_id);
+        return $this->db->affected_rows();
     }
 
     public function delete($post_id)

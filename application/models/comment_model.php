@@ -7,7 +7,7 @@ class Comment_model extends CI_Model {
     
     public function gets($post_id)
     {
-        $query = $this->db->order_by('comment_id', 'desc')->get_where('comment', array('post_id'=>$post_id));
+        $query = $this->db->order_by('root, seq')->get_where('comment', array('post_id'=>$post_id));
         if ($query->num_rows() > 0) 
         {
             return $query->result();
@@ -38,6 +38,25 @@ class Comment_model extends CI_Model {
             'post_id'=>$post_id,
             'user_id'=>$user_id
         ));
+        
+        $comment_id = $this->db->insert_id();
+        $this->db->where('comment_id', $comment_id);
+        $this->db->set('root', $comment_id);
+        $this->db->update('comment');
+
+        return $comment_id;
+    }
+
+    public function writeReply($content, $post_id, $user_id, $root, $depth, $seq)
+    {
+        $this->db->insert('comment', array(
+            'content'=>$content,
+            'post_id'=>$post_id,
+            'user_id'=>$user_id,
+            'root'=>$root,
+            'depth'=>$depth,
+            'seq'=>$seq
+        ));
         return $this->db->insert_id();
     }
 
@@ -60,7 +79,24 @@ class Comment_model extends CI_Model {
         }
     }
 
-    public function delete($comment_id)
+    public function getSeq($root)
+    {
+        $result =  $this->db->get_where('comment', array('root'=>$root));
+        return $result->num_rows();
+    }
+
+    public function updateSeq($root, $seq) //답글 insert 후 순서 업데이트
+    {
+        //root가 같고 파라미터로 들어온 seq보다 크거나 같은 값들을 모두 +1
+        $array = array('root' => $root, 'seq >=' => $seq);
+        $this->db->where($array);
+        $this->db->set('seq', 'seq+1', FALSE); //FALSE로 하면 쿼리를 자동으로 이스케이프 하지 않음. 
+        // TRUE일 경우 INSERT INTO post (views) VALUES ('views+1')
+        // FALSE일 경우 INSERT INTO post (views) VALUES (views+1)
+        $this->db->update('comment');
+    }
+
+    public function delete($comment_id) //댓글 삭제
     {
         try
         {

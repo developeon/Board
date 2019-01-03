@@ -6,6 +6,7 @@
     .media {
         border-radius: 0.25rem;
         padding: 1rem;
+        /* padding-bottom: 0; */
     }
 </style>
 <div class="container">
@@ -137,7 +138,8 @@
                 if (data['count'] > 0) {
                 data['comments'].forEach(function(comment) {
                     html += `
-                        <div class="media">
+                        <div id="media${comment.comment_id}" class="media" style="margin-left:${comment.depth}rem;">
+                        
                             <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/${comment.user_profile_picture}" alt="profile picture" style="width:48px;height:48px;">
                             <div class="media-body" style="text-align: left;">
                                 <div class="row">
@@ -153,8 +155,14 @@
                         html += `<span style="cursor: pointer;" onclick="deleteComment(${comment.comment_id});">X</span>`;
                     html += `
                                     </div>
+                                   
                                 </div>
-                                ${comment.content}
+                                <div class="row container">
+                                    ${comment.content}
+                                </div>
+                                <div class="row container">
+                                        <button type="button" onclick="showReplyBox(${comment.comment_id}, ${comment.root}, ${comment.depth}, ${comment.seq})">답글</button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -181,6 +189,47 @@
                     alert('댓글을 삭제하지 못했습니다.');
                 } else {
                     alert('댓글이 삭제되었습니다.');
+                    readComment();
+                }
+            }
+        });
+    }
+
+    function showReplyBox(comment_id, root, depth, seq) { //답글 작성 textarea 출력
+        $( ".replaybox" ).remove();
+        var replybox = `
+            <div class="row replaybox" style="margin-bottom: 1rem;margin-left:${depth}rem">
+                    <div class="col-10">
+                        <textarea class="form-control" id="reply"></textarea>
+                    </div>
+                    <div class="col-2 pl-0">
+                        <button class="btn btn-default w-100 h-100" type="button" onclick="writeReply(${root}, ${depth}, ${seq})">등록</button>
+                    </div>
+            </div>
+        `;
+        $(replybox).insertAfter("#media" + comment_id);
+    }
+
+    function writeReply(root, depth, seq) { //답글 작성
+        $.ajax({
+            url: '/board/wrtie_reply',
+            type: 'POST',
+            data: { 
+                content: document.getElementById("reply").value,
+                post_id: <?=$post->post_id?>,
+                root: root,
+                depth: depth,
+                seq: seq
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            },
+            success: function(data) {
+                //답글 작성에 성공하면 comment_id값이 넘어옴 
+                if(!data) {
+                    alert('답글을 작성하지 못했습니다.');
+                }
+                else {
                     readComment();
                 }
             }

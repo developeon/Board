@@ -4,13 +4,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Board extends MY_Controller {
         public function __construct() {
                 parent::__construct();
-                $this->load->model('post_model');
-                $this->load->model('user_model');
-                $this->load->model('comment_model');
+                // $this->load->model('post_model');
+                // $this->load->model('user_model');
+                // $this->load->model('comment_model');
         }
 
         public function index()
         {
+                $this->load->model('post_model');
+                $this->load->model('user_model');
+
                 $this->_header();
 
                 $this->load->library('pagination');
@@ -47,10 +50,18 @@ class Board extends MY_Controller {
                 $data['pagination'] = $this->pagination->create_links();
 
                 $page = $this->uri->rsegment(3,0);
-                $search_type = $this->input->post('search_type');
-                $search_text = $this->input->post('search_text');
-                $data['posts'] = $this->post_model->gets($config['per_page'], $page, $search_type, $search_text);
+                $data['search_type'] = $this->input->post('search_type'); //$data['search_type']
+                $data['search_text'] = $this->input->post('search_text');
+                if ($data['search_type'] === 'user_id')
+                {
+                        $user_id = $this->user_model->getByName($data['search_text'])->user_id;
+                        $data['search_text'] =  $user_id ? $user_id : -1;
+                }
+
+                $data['posts'] = $this->post_model->gets($config['per_page'], $page, $data['search_type'], $data['search_text']);
                 
+                $data['search_text'] = $this->input->post('search_text');
+
                 if ($data['posts'])
                 {
                         foreach ($data['posts'] as $post)
@@ -65,6 +76,8 @@ class Board extends MY_Controller {
 
         public function write()
         {
+                $this->load->model('post_model');
+
                 checkIsLogin();
                 $this->_header();
                 $this->load->library('form_validation');
@@ -82,11 +95,13 @@ class Board extends MY_Controller {
                 $this->_footer();
         }
 
-        public function write_comment()
+        public function write_comment() //댓글 작성
         {
                 //TODO :없는 게시글 번호 입력했을때 DB에 등록되면 안됨!!
-                
+                $this->load->model('comment_model');
+
                 checkIsLogin();
+
                 $post_id = $this->input->post('post_id');
                 $content = $this->input->post('content');
                 if (!$post_id) //주소창 직접 접근
@@ -104,8 +119,36 @@ class Board extends MY_Controller {
                 redirect('/board/read/'.$post_id);
         }
 
+        public function wrtie_reply() // 답글 작성
+        {
+                $this->load->model('comment_model');
+
+                checkIsLogin();
+
+                $content = $this->input->post('content');
+                $post_id = $this->input->post('post_id');
+                $root = $this->input->post('root');
+                $depth = $this->input->post('depth') + 1;
+                $seq = $this->input->post('seq') + 1;
+
+                if ($depth===1)
+                {
+                        $seq = $this->comment_model->getSeq($root);
+                }
+                else
+                {
+                        $this->comment_model->updateSeq($root, $seq); //끼워 넣기 전에 seq 업데이트
+                }
+                $insert_id = $this->comment_model->writeReply($content, $post_id, $this->session->userdata('user_id'), $root, $depth, $seq);
+                echo $insert_id;
+
+        } 
+            
         public function read($post_id)
         {
+                $this->load->model('post_model');
+                $this->load->model('user_model');
+
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
                 $data['post'] = $this->post_model->get($post_id)->row();
@@ -124,6 +167,7 @@ class Board extends MY_Controller {
 
         public function readComment()
         {
+                $this->load->model('user_model');
                 $this->load->model('comment_model');
 
                 $post_id = $this->input->post('post_id');
@@ -142,6 +186,8 @@ class Board extends MY_Controller {
 
         public function update($post_id)
         {
+                $this->load->model('post_model');
+
                 $data['post'] = $this->post_model->get($post_id)->row();
                 if (!$data['post'])
                 {
@@ -156,6 +202,8 @@ class Board extends MY_Controller {
 
         public function update_proc($post_id)
         {
+                $this->load->model('post_model');
+
                 $data['post'] = $this->post_model->get($post_id)->row();
                 if (!$data['post'])
                 {
@@ -180,7 +228,9 @@ class Board extends MY_Controller {
         }
 
         public function delete()
-        {
+        {     
+                $this->load->model('post_model');
+
                 $post_id = $this->uri->segment(3);
                 $data['post'] = $this->post_model->get($post_id)->row();
                 if (!$data['post'])
