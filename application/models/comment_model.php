@@ -18,6 +18,13 @@ class Comment_model extends CI_Model {
         }
     }
 
+    public function getAligned()
+    {
+        $query = $this->db->get('comment');
+        return $query->result_array();
+        //TODO: try-catch 
+    }
+
     public function getsById($user_id)
     {
         $query = $this->db->get_where('comment', array('user_id' => $user_id));
@@ -31,7 +38,7 @@ class Comment_model extends CI_Model {
         }
     }
     
-    public function write($content, $post_id, $user_id)
+    public function writeComment($content, $post_id, $user_id)
     {
         $this->db->insert('comment', array(
             'content'=>$content,
@@ -44,7 +51,7 @@ class Comment_model extends CI_Model {
         $this->db->set('root', $comment_id);
         $this->db->update('comment');
 
-        return $comment_id;
+        echo $comment_id;
     }
 
     public function writeReply($content, $post_id, $user_id, $root, $depth, $seq)

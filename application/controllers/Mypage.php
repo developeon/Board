@@ -48,7 +48,14 @@ class Mypage extends MY_Controller {
                 $file_name = $data["upload_data"]["file_name"];
                 $result = $this->user_model->updateBoth($this->session->userdata('user_id'), $name, $hash, $file_name);
             }
+            else
+            {
+                $this->session->set_flashdata('message', $this->upload->display_errors('', ''));
+                redirect('/mypage');
+                exit;
+            }
         }
+        
         if (empty($result))
         {
             $this->session->set_flashdata('message', '프로필 수정에 실패했습니다.');

@@ -17,8 +17,17 @@ class User_model extends CI_Model {
 
     function getByEmail($option)
     {
-        $result = $this->db->get_where('user', array('email'=>$option['email']))->row();
-        return $result;
+        $result = $this->db->get_where('user', array('email'=>$option['email']));
+        try {
+			$result = ($result) ? $result : false;
+			if ($result) {
+				return $result->result_array();
+			} else {
+				return 0;
+			}
+		} catch (Exception $e) {
+			return 0;
+		}
     }
 
     function getByName($name)

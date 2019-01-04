@@ -4,7 +4,7 @@
             <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$user[0]->profile_picture?>" alt="profile picture" style="width:120px;height:120px;">
             <div class="media-body">
                 <h5 class="mt-0"><?=$user[0]->name?></h5>
-                총 게시글 <?=$count['post']?>개 | 총 댓글 <?=$count['comment']?>개 
+                총 게시글 <?=$count['post']?>개 | 총 댓글 <?=$count['comment']?>개 | 총 북마크 <?=$count['bookmark']?>개
             </div>
         </div>
     </div>
@@ -15,6 +15,9 @@
         </li>
         <li class="nav-item">
             <button class="nav-link" id="comment" onclick="showComment()">댓글</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="bookmark" onclick="showBookmark()">북마크</button>
         </li>
     </ul>
     <table class="table">
@@ -124,6 +127,51 @@
                         <tr>
                             <th scope="row">${data[i].comment_id}</th>
                             <td><a href="<?=site_url('/board/read/')?>${data[i].post_id}" target="_blank">${data[i].content}</a></td>
+                            <td>${data[i].register_date}</td>
+                        </tr>
+                    `;
+                }
+                $("tbody").html(html);
+            }
+        });
+    }
+
+    function showBookmark() {
+        $( "#comment" ).removeClass("active");
+        $( "#post" ).removeClass("active");
+        $( "#bookmark" ).addClass("active");
+
+        $.ajax({
+            url: '/profile/getBookmarks',
+            type: 'POST',
+            data: { user_id: <?=$user[0]->user_id?>},
+            dataType: 'json',
+            error: function() {
+                alert('Something is wrong');
+            },
+            success: function(data) {
+                $("thead").html(`
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">등록일</th>
+                    </tr>
+                `);
+                if (!data) {
+                    $("tbody").html(`
+                        <tr>
+                            <th scope="row" colspan="5"><p class="text-center">북마크한 글이 없습니다.</p></th>
+                        </tr>
+                    `);
+                    return false;
+                }
+                var html = '';
+                for (i=0; i<data.length; i++)
+                {
+                    html += `
+                        <tr>
+                            <th scope="row">${data[i].bookmark_id}</th>
+                            <td>${data[i].title}</td>
                             <td>${data[i].register_date}</td>
                         </tr>
                     `;

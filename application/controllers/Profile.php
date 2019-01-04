@@ -7,6 +7,7 @@ class Profile extends MY_Controller {
         $this->load->model('user_model');
         $this->load->model('post_model');
         $this->load->model('comment_model');
+        $this->load->model('bookmark_model');
 
         $this->_header();
 
@@ -22,7 +23,8 @@ class Profile extends MY_Controller {
         $data['user'] = $query->result();
         $post_count = $this->post_model->getCount($user_id);
         $comment_count = $this->comment_model->getCount($user_id);
-        $data['count'] = array("post" => $post_count, "comment" => $comment_count);
+        $bookmark_count = $this->bookmark_model->getCount($user_id);
+        $data['count'] = array("post" => $post_count, "comment" => $comment_count, "bookmark" => $bookmark_count);
         
         $this->load->view('profile', $data);
 
@@ -35,7 +37,6 @@ class Profile extends MY_Controller {
 
         //echo $this->input->post('user_id');
         //TODO: user_id에 맞는 post 모두 출력!
-        //페이징 관련 config가 덮어쓰는거랬는데 이거 깊게 파보기
         $result = $this->post_model->getsById($this->input->post('user_id'));
         echo json_encode($result);
     }
@@ -45,6 +46,25 @@ class Profile extends MY_Controller {
         $this->load->model('comment_model');
 
         $result = $this->comment_model->getsById($this->input->post('user_id'));
+        echo json_encode($result);
+    }
+
+    public function getBookmarks()
+    {
+        $this->load->model('bookmark_model');
+        $this->load->model('post_model');
+
+        $result = $this->bookmark_model->getsById($this->input->post('user_id'));
+        //여기서 foreach돌면서 제목 추가하기
+        //$this->post_model->get($post_id);
+
+        if ($result)
+        {
+            foreach ($result as $bookmark) {
+                    $bookmark->title = $this->post_model->get($bookmark->post_id)->row()->title;
+            }
+        }
+
         echo json_encode($result);
     }
 }

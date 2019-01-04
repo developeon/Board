@@ -24,6 +24,19 @@
             </p>
             <p class="text-left"><?=$post->content?></p>
             <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                <?php 
+                    if ($this->session->userdata('is_login'))
+                    {
+                ?>
+                    <button type="button" class="btn btn-default" onclick="updateBookmark(<?=$post->post_id?>)"><img id="bookmark-icon" src="/includes/img/material_icons/<?=$bookmark ? 'bookmark' : 'bookmark_border'?>.svg"></button>
+                <?php 
+                    }
+                ?>
+                    
+                </div>
                 <div class="col text-right">
                 <?php
                 if ($this->session->userdata('user_id') === $post->user_id)
@@ -38,7 +51,8 @@
             </div>
         </div>
         <div class="card-footer text-muted">
-            <form action="<?=site_url('/board/write_comment')?>" method="post">
+            <!-- 이부분을 ajax로 수정 -->
+            <!-- <form action="<?=site_url('/board/write_comment')?>" method="post">
                 <input type="hidden" name="post_id" value="<?=$post->post_id?>">
                 <div class="row" style="margin-bottom: 1rem;">
                     <div class="col-10">
@@ -60,7 +74,27 @@
                         } ?>
                     </div>
                 </div>
-            </form>
+            </form> -->
+            <div class="row" style="margin-bottom: 1rem;">
+                <div class="col-10">
+                    <textarea class="form-control" name="content" required id="comment"></textarea>
+                </div>
+                <div class="col-2 pl-0">
+                    <?php
+                    if ($this->session->userdata('is_login'))
+                    { ?>
+                        <button class="btn btn-default w-100 h-100" type="button" onclick="writeComment()">등록</button>
+                    <?php
+                    }
+                    else
+                    { ?>
+                        <button class="btn btn-default w-100 h-100" type="button" data-toggle="modal" data-target="#loginModal">
+                            등록
+                        </button>
+                    <?php
+                    } ?>
+                </div>
+            </div>
             <p class="text-left">
                 <b>댓글 (<span id="count">0</span>) | 조회수 (<?=$post->views?>)</b>
             </p>
@@ -81,7 +115,7 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form action="<?=site_url('/auth/authentication/comment/'.$post->post_id)?>" method="post">
+                <!-- <form action="<?=site_url('/auth/authentication/comment/'.$post->post_id)?>" method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="이메일" name="email">
                     </div>
@@ -89,7 +123,17 @@
                         <input type="password" class="form-control" placeholder="패스워드" name="password">
                     </div>
                     <button class="btn btn-lg btn-submit btn-block" type="submit">로그인</button>
-                </form>
+                </form> -->
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="이메일" name="email" id="email">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="패스워드" name="password" id="password">
+                </div>
+                <div class="form-group">
+                    <p id="login-alert"></p>
+                </div>
+                <button class="btn btn-lg btn-submit btn-block" type="button" id="login-button">로그인</button>
             </div>
         </div>
     </div>
@@ -133,7 +177,10 @@
                 alert('댓글 정보를 불러오지 못했습니다.');
             },
             success: function(data) {
-                var user_id = <?=$this->session->userdata('user_id')?>;
+                <?php 
+                    $user_id = is_null($this->session->userdata('user_id')) ? -1 : $this->session->userdata('user_id');
+                ?>
+                var user_id = <?=$user_id?>;
                 var html = '';
                 if (data['count'] > 0) {
                 data['comments'].forEach(function(comment) {
@@ -162,6 +209,7 @@
                                 </div>
                                 <div class="row container">
                                         <button type="button" onclick="showReplyBox(${comment.comment_id}, ${comment.root}, ${comment.depth}, ${comment.seq})">답글</button>
+                                        <button type="button" onclick="copyURL(${comment.comment_id})">복사</button>
                                 </div>
                             </div>
                         </div>
@@ -232,6 +280,99 @@
                 else {
                     readComment();
                 }
+            }
+        });
+    }
+
+    function copyToClipboard(val) {
+        var t = document.createElement("textarea");
+        document.body.appendChild(t);
+        t.value = val;
+        t.select(); //텍스트 선택 
+        document.execCommand('copy'); //선택된 부분을 복사.
+        document.body.removeChild(t);
+    }
+
+    function copyURL(comment_id) {
+        copyToClipboard(`<?=site_url('board/comment/')?>${comment_id}`); //주소 이렇게 쓰는거 맞나.. ?
+        alert('댓글 주소를 복사했습니다.');
+    }
+
+    function writeComment() {
+        //postid랑 content를 넘겨줘야함
+        var content = document.getElementById('comment').value;
+        $.ajax({
+            url: '/board/write_comment',
+            type: 'POST',
+            data: { 
+                post_id: <?=$post->post_id?>,
+                content: content 
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            },
+            success: function(data) {
+               if(!data) {
+                   alert("댓글 작성 실패");
+               }
+               document.getElementById("comment").value = "";
+               readComment();
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $('#login-button').click(function() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value
+            $.ajax({
+                url: '/auth/authentication/comment/<?=$post->post_id?>',
+                type: 'POST',
+                data: { 
+                    email: email,
+                    password: password
+                },
+                error: function(request,status,error) {
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                },
+                success: function(data) {
+                    if(!data) {
+                        document.getElementById("password").value = "";
+                        document.getElementById("password").focus();
+                        document.getElementById("login-alert").innerHTML = "<font color='red'>아이디 또는 비밀번호를 다시 확인하세요.<br>등록되지 않은 아이디이거나, 아이디 또는 비밀번호를 잘못 입력하셨습니다.</font>";
+                    } 
+                    else {
+                        $('#loginModal').modal('hide');
+                        writeComment();
+                    }
+                }
+            });
+        });
+    });
+
+    function updateBookmark(post_id) {
+        $.ajax({
+            url: '/board/update_bookmark',
+            type: 'POST',
+            data: { 
+                post_id: post_id
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            },
+            success: function(resultData) {
+              if(resultData) {
+                var now = $('#bookmark-icon').attr('src');
+                if(now.indexOf('bookmark_border') > 0) {
+                    $('#bookmark-icon').attr('src', '/includes/img/material_icons/bookmark.svg');
+                } 
+                else {
+                    $('#bookmark-icon').attr('src', '/includes/img/material_icons/bookmark_border.svg');
+                }
+              }
+              else {
+                  alert("오류가 발생했습니다.");
+              }
             }
         });
     }

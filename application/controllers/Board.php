@@ -104,19 +104,20 @@ class Board extends MY_Controller {
 
                 $post_id = $this->input->post('post_id');
                 $content = $this->input->post('content');
-                if (!$post_id) //주소창 직접 접근
-                {
-                        $this->session->set_flashdata('message', '잘못된 접근입니다.');
-                        redirect('/board');
-                }
-                if (!$content) //required 지운 경우 또는 name값을 수정한경우
-                {
-                        $this->session->set_flashdata('message', '댓글 내용을 입력하세요.');
-                        redirect('/board/read/'.$post_id);
-                }
+                // if (!$post_id) //주소창 직접 접근
+                // {
+                //         $this->session->set_flashdata('message', '잘못된 접근입니다.');
+                //         redirect('/board');
+                // }
+                // if (!$content) //required 지운 경우 또는 name값을 수정한경우
+                // {
+                //         $this->session->set_flashdata('message', '댓글 내용을 입력하세요.');
+                //         redirect('/board/read/'.$post_id);
+                // }
                
-                $this->comment_model->write($content, $post_id, $this->session->userdata('user_id'));
-                redirect('/board/read/'.$post_id);
+                // $this->comment_model->writeComment($content, $post_id, $this->session->userdata('user_id'));
+                // redirect('/board/read/'.$post_id);
+                echo $this->comment_model->writeComment($content, $post_id, $this->session->userdata('user_id'));
         }
 
         public function wrtie_reply() // 답글 작성
@@ -144,10 +145,13 @@ class Board extends MY_Controller {
 
         } 
             
-        public function read($post_id)
+        public function read()
         {
                 $this->load->model('post_model');
                 $this->load->model('user_model');
+                $this->load->model('bookmark_model');
+
+                $post_id = $this->uri->segment(3,0);
 
                 $this->post_model->increaseViews($post_id);
                 $this->_header();
@@ -160,7 +164,9 @@ class Board extends MY_Controller {
                 $post_data = $this->user_model->get($data['post']->user_id)->row();
                 $data['post']->user_name = $post_data->name;
                 $data['post']->user_profile_picture = $post_data->profile_picture;
-                
+
+                $data['bookmark'] = $this->bookmark_model->getStatus($this->session->userdata('user_id'), $post_id) ? true : false;
+
                 $this->load->view('read', $data);
                 $this->_footer();
         }
@@ -259,5 +265,38 @@ class Board extends MY_Controller {
                 $comment_id = $this->input->post('comment_id');
                 $result = $this->comment_model->delete($comment_id);
                 echo $result;
+        }
+
+        public function comment() //댓글 주소를 복사해서 접속한경우(복사된 댓글과 댓글의 답글들을 출력)
+        {
+                $this->load->model('comment_model');
+
+                $comment_id = $this->uri->rsegment(3,0);
+                //comment_id로 댓글 검색하고 없는경우 main으로 redirect
+                //있는경우 view로 출력. 그리고 해당 댓글이 작성된 게시물로 돌아가기 버튼도 만들기
+                $data['comments'] = $this->comment_model->getAligned();
+                //array받아온거 foreach 돌면서 자식 답글이 맞는지 확인하면서 새로운 array만들기
+                $this->_header();
+                $this->load->view('comment', $data);
+                $this->_footer();
+        }
+
+        public function update_bookmark() //북마크 등록/해제
+        {
+                $this->load->model('bookmark_model');
+
+                $user_id = $this->session->userdata('user_id');
+                $post_id = $this->input->post('post_id');
+
+                $bookmark = $this->bookmark_model->getStatusWithoutCheck($user_id, $post_id) ? true : false;
+                if ($bookmark) 
+                {
+                        $bookmark_id = $this->bookmark_model->update($user_id, $post_id);
+                }
+                else
+                {
+                        $bookmark_id = $this->bookmark_model->insert($user_id, $post_id);
+                }
+                echo $bookmark_id;
         }
 }

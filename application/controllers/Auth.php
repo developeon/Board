@@ -41,7 +41,9 @@ class Auth extends MY_Controller {
             if ($result > 0)
             {
                 $this->session->set_flashdata('message', '환영합니다.');
-                redirect('/auth/login');
+                $this->session->set_userdata('is_login', true);
+                $this->session->set_userdata('user_id', $result);
+                redirect('/board');
             }
             else
             {
@@ -72,24 +74,38 @@ class Auth extends MY_Controller {
     public function authentication() //로그인 처리
     {
         $this->load->model('user_model');
-        
+ 
+        $password = $this->input->post('password');
+        if (empty($password)) {
+           $password = 'fail';
+        } //password가 null인 경우 로그인되는 오류를 임시로 막음
+
         $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
-        if ($this->input->post('email') === $user->email && password_verify($this->input->post('password'), $user->password))
+        if (!empty($user)) 
         {
-            $this->session->set_userdata('is_login', true);
-            $this->session->set_userdata('user_id', $this->user_model->getByEmail(array('email'=>$this->input->post('email')))->user_id);
-            if($this->uri->segment(3,0)=='login') //로그인 페이지에서 로그인한 경우
+            if ($this->input->post('email') === $user[0]["email"] && password_verify($password, $user[0]["password"]))
             {
-                redirect('/board');
+                $this->session->set_userdata('is_login', true);
+                $this->session->set_userdata('user_id', $user[0]["user_id"]);
+                if($this->uri->segment(3,0)=='login') //로그인 페이지에서 로그인한 경우
+                {
+                    redirect('/board');
+                }
+                else if($this->uri->segment(3,0)=='post') //글쓰기 버튼을 통해 로그인한 경우
+                {
+                    redirect('/board/write');
+                }
+                else if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
+                {
+                    //redirect('/board/read/'.$this->uri->segment(4,0));
+                    echo true;
+                    exit;
+                }
             }
-            else if($this->uri->segment(3,0)=='post') //글쓰기 버튼을 통해 로그인한 경우
-            {
-                redirect('/board/write');
-            }
-            else if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
-            {
-                redirect('/board/read/'.$this->uri->segment(4,0));
-            }
+        } 
+        if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
+        {
+            echo false;
         }
         else
         {
