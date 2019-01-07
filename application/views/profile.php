@@ -171,7 +171,7 @@
                     html += `
                         <tr>
                             <th scope="row">${data[i].bookmark_id}</th>
-                            <td>${data[i].title}</td>
+                            <td><a href="<?=site_url('/board/read/')?>${data[i].post_id}" target="_blank">${data[i].title}</a></td>
                             <td>${data[i].register_date}</td>
                         </tr>
                     `;

@@ -138,7 +138,33 @@ class Board extends MY_Controller {
                 }
                 else
                 {
-                        $this->comment_model->updateSeq($root, $seq); //끼워 넣기 전에 seq 업데이트
+                //         //만약 root와 depth가 같은게 있다면? 그 다음으로 가야함. 중간에 끼워넣는게 아니라. seq를 정해줘야할
+                //       if($this->comment_model->test($root, $depth))
+                //       {
+                //               $max_seq = $this->comment_model->test2($root, $depth);
+                //               //root와 depth가 같은 컬럼의 seq 최대값 +1로 insert를 하고 그 뒤에 있는 컬럼의 seq는 다 +1씩
+                //               $seq =$max_seq[0]["max(seq)"] + 1;
+                //       }
+                //       else
+                //       {
+                        
+                //       }
+
+                      if($this->comment_model->test($root, $depth, $seq))
+                      {
+                        $count = 0;
+                        $comments = $this->comment_model->getsTest($root, $seq);
+                        //echo var_dump($comments);
+                        //exit;
+                        //while
+                        foreach ($comments as $comment){
+                                if($comment->depth < $depth) break;
+                                $count++;
+                                $seq = $comment->seq;
+                        }
+                        if($count > 0) $seq = $seq +1;
+                      }
+                      $this->comment_model->updateSeq($root, $seq); //끼워 넣기 전에 seq 업데이트
                 }
                 $insert_id = $this->comment_model->writeReply($content, $post_id, $this->session->userdata('user_id'), $root, $depth, $seq);
                 echo $insert_id;
@@ -236,6 +262,8 @@ class Board extends MY_Controller {
         public function delete()
         {     
                 $this->load->model('post_model');
+                $this->load->model('comment_model');
+                $this->load->model('bookmark_model');
 
                 $post_id = $this->uri->segment(3);
                 $data['post'] = $this->post_model->get($post_id)->row();
@@ -245,6 +273,11 @@ class Board extends MY_Controller {
                         redirect('/board');
                 }
                 checkWriter($data['post']->user_id);
+
+                //해당 게시물에 대한 댓글이랑 북마크 다 지워주기 
+                $this->comment_model->deleteByPost($post_id);
+                $this->bookmark_model->deleteByPost($post_id);
+
                 if ($this->post_model->delete($post_id))
                 {
                         $this->session->set_flashdata('message', '게시글이 삭제되었습니다.'); 
@@ -270,11 +303,46 @@ class Board extends MY_Controller {
         public function comment() //댓글 주소를 복사해서 접속한경우(복사된 댓글과 댓글의 답글들을 출력)
         {
                 $this->load->model('comment_model');
+                $this->load->model('user_model');
 
                 $comment_id = $this->uri->rsegment(3,0);
                 //comment_id로 댓글 검색하고 없는경우 main으로 redirect
                 //있는경우 view로 출력. 그리고 해당 댓글이 작성된 게시물로 돌아가기 버튼도 만들기
-                $data['comments'] = $this->comment_model->getAligned();
+                // $data['comments'] = $this->comment_model->getAligned();
+                
+                $comment = $this->comment_model->getByCommentId($comment_id);
+      
+                // $data["comments"][0] = $comment;
+                // $comment_data = $this->user_model->get($data["comments"][0][0]->user_id)->row();
+                // $data["comments"][0][0]->user_name = $comment_data->name;
+                // $data["comments"][0][0]->user_profile_picture = $comment_data->profile_picture;
+               
+                if(!empty($comment))
+                {
+                        $comments = $this->comment_model->getsTest($comment[0]->root, $comment[0]->seq);
+                       
+                        $depth = $comment[0]->depth;
+                        $count = 0;
+                        $flag = 0;
+                        foreach ($comments as $comment){
+                                $count++;
+                                if($comment->depth <= $depth) {
+                                        if($flag > 0) break;
+                                        $flag++;
+                                }
+                                $comment_data = $this->user_model->get($comment->user_id)->row();
+                                $comment->user_name = $comment_data->name;
+                                $comment->user_profile_picture = $comment_data->profile_picture;
+                                $data["comments"][$count] = $comment;
+                        }
+                }
+                else
+                {
+                        $this->session->set_flashdata('message', '존재하지 않는 댓글입니다.');
+                        redirect('/board');
+                }
+
+               
                 //array받아온거 foreach 돌면서 자식 답글이 맞는지 확인하면서 새로운 array만들기
                 $this->_header();
                 $this->load->view('comment', $data);

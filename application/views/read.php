@@ -88,7 +88,7 @@
                     }
                     else
                     { ?>
-                        <button class="btn btn-default w-100 h-100" type="button" data-toggle="modal" data-target="#loginModal">
+                        <button class="btn btn-default w-100 h-100" id="write-button" type="button" data-toggle="modal" data-target="#loginModal">
                             등록
                         </button>
                     <?php
@@ -185,7 +185,7 @@
                 if (data['count'] > 0) {
                 data['comments'].forEach(function(comment) {
                     html += `
-                        <div id="media${comment.comment_id}" class="media" style="margin-left:${comment.depth}rem;">
+                        <div id="media${comment.comment_id}" class="media" style="margin-left:${(comment.depth*2)}rem;">
                         
                             <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/${comment.user_profile_picture}" alt="profile picture" style="width:48px;height:48px;">
                             <div class="media-body" style="text-align: left;">
@@ -273,6 +273,7 @@
                 alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             },
             success: function(data) {
+                console.log(data);
                 //답글 작성에 성공하면 comment_id값이 넘어옴 
                 if(!data) {
                     alert('답글을 작성하지 못했습니다.');
@@ -335,14 +336,31 @@
                 error: function(request,status,error) {
                     alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
-                success: function(data) {
-                    if(!data) {
+                success: function(resultData) {
+                    console.log(resultData);
+                    var resultData = JSON.parse( resultData );
+                    if(!resultData) {
                         document.getElementById("password").value = "";
                         document.getElementById("password").focus();
                         document.getElementById("login-alert").innerHTML = "<font color='red'>아이디 또는 비밀번호를 다시 확인하세요.<br>등록되지 않은 아이디이거나, 아이디 또는 비밀번호를 잘못 입력하셨습니다.</font>";
                     } 
                     else {
                         $('#loginModal').modal('hide');
+                        $("#write-button").removeAttr("data-toggle");
+                        $("#write-button").removeAttr("data-target");
+                        $("#write-button").attr("onclick", "writeComment()");
+                        var header = `<div class="dropdown">
+                            <img src="/includes/img/profile_picture/${resultData.profile_picture}" class="rounded-circle dropdown-toggle" data-toggle="dropdown" style="width:38px;height:38px;cursor:pointer;" alt="profile picture"> 
+                            <div class="dropdown-menu dropdown-menu-right">        
+                                <a class="dropdown-item" href="<?=site_url('/board')?>"><img src="/includes/img/material_icons/edit.svg" alt="" style="width:18px;"> 게시물 보기</a>
+                                <a class="dropdown-item" href="<?=site_url('/profile')?>/${resultData.user_id}"><img src="/includes/img/material_icons/dashboard.svg" alt="" style="width:18px;"> 나의 활동</a>
+                                <a class="dropdown-item" href="<?=site_url('/mypage')?>"><img src="/includes/img/material_icons/face.svg" alt="" style="width:18px;"> 내 정보 관리</a>
+                                <a class="dropdown-item" href="<?=site_url('/auth/logout')?>"><img src="/includes/img/material_icons/logout.svg" alt="" style="width:18px;"> 로그아웃</a>
+                            </div>
+                        </div>`;
+                        $(".dropdown").html(header);
+                        //프로필부분 업데이트
+                       
                         writeComment();
                     }
                 }

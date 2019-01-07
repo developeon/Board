@@ -55,13 +55,13 @@ class Profile extends MY_Controller {
         $this->load->model('post_model');
 
         $result = $this->bookmark_model->getsById($this->input->post('user_id'));
-        //여기서 foreach돌면서 제목 추가하기
-        //$this->post_model->get($post_id);
 
         if ($result)
         {
             foreach ($result as $bookmark) {
-                    $bookmark->title = $this->post_model->get($bookmark->post_id)->row()->title;
+                    $post_info = $this->post_model->get($bookmark->post_id)->row();
+                    $bookmark->post_id = $post_info->post_id;
+                    $bookmark->title = $post_info->title;
             }
         }
 

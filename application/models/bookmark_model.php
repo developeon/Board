@@ -54,7 +54,7 @@ class Bookmark_model extends CI_Model {
 
     public function getsById($user_id) //유저의 북마크 정보 출력 
     {
-        $query = $this->db->get_where('bookmark', array('user_id' => $user_id));
+        $query = $this->db->get_where('bookmark', array('user_id'=>$user_id, 'bookmark_check'=>false));
         if ($query->num_rows() > 0)
         {
             return $query->result();
@@ -67,7 +67,7 @@ class Bookmark_model extends CI_Model {
 
     public function getCount($user_id) //유저의 총 북마크 수 출력
     {
-        $query = $this->db->get_where('bookmark', array('user_id' => $user_id));
+        $query = $this->db->get_where('bookmark', array('user_id' => $user_id, 'bookmark_check'=>false));
         if ($query->num_rows() > 0)
         {
             return $query->num_rows();
@@ -76,5 +76,13 @@ class Bookmark_model extends CI_Model {
         {
             return 0;
         }
+    }
+
+    public function deleteByPost($post_id) //게시물 삭제시 해당 게시물에 대한 북마크 모두 삭제
+    {
+        $this->db->where(array('post_id' => $post_id));
+        $this->db->set('bookmark_check', 'true', FALSE);
+        $this->db->update('bookmark');
+        return $this->db->affected_rows();
     }
 }

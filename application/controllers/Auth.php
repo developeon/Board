@@ -33,6 +33,7 @@ class Auth extends MY_Controller {
         else
         {
             $hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+
             $result = $this->user_model->register(array(
                 'name'=>$this->input->post('name'),
                 'email'=>$this->input->post('email'),
@@ -75,15 +76,14 @@ class Auth extends MY_Controller {
     {
         $this->load->model('user_model');
  
-        $password = $this->input->post('password');
-        if (empty($password)) {
-           $password = 'fail';
-        } //password가 null인 경우 로그인되는 오류를 임시로 막음
+        $email = $this->input->post('email');
+        //$password = $this->input->post('password');
 
-        $user = $this->user_model->getByEmail(array('email'=>$this->input->post('email')));
+        $user = $this->user_model->getByEmail(array('email'=>$email));
+        
         if (!empty($user)) 
-        {
-            if ($this->input->post('email') === $user[0]["email"] && password_verify($password, $user[0]["password"]))
+        {  
+            if ($email === $user[0]["email"] && password_verify($this->input->post('password'), $user[0]['password']))
             {
                 $this->session->set_userdata('is_login', true);
                 $this->session->set_userdata('user_id', $user[0]["user_id"]);
@@ -98,14 +98,18 @@ class Auth extends MY_Controller {
                 else if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
                 {
                     //redirect('/board/read/'.$this->uri->segment(4,0));
-                    echo true;
+                    $result["echo"] = true;
+                    $result["profile_picture"] = $user[0]["profile_picture"];
+                    $result["user_id"] = $user[0]["user_id"];
+                    echo json_encode($result);
                     exit;
                 }
             }
         } 
         if($this->uri->segment(3,0)=='comment') //댓글작성 버튼을 통해 로그인한 경우
         {
-            echo false;
+            $result["echo"] = false;
+            echo json_encode($result);
         }
         else
         {

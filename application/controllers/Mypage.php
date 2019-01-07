@@ -26,7 +26,17 @@ class Mypage extends MY_Controller {
         checkIsLogin();
 
         $name = $this->input->post('name');
-        $hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+        $password = $this->input->post('password');
+        if (empty($password)) 
+        {
+            $hash = $this->user_model->get($this->session->userdata('user_id'))->result()[0]->password;
+        }
+        else
+        {
+            $hash = password_hash($password, PASSWORD_BCRYPT);
+        }
+        
+        //password가 null일경우 업뎃 x 하거나 $hash값을 원래 db에서 가져와서 덮어쓰기
         
         if (empty($_FILES['profile_picture']['name'])) 
         {

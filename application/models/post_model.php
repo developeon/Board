@@ -7,6 +7,8 @@ class Post_model extends CI_Model {
 
     public function gets($limit, $start, $search_type, $search_text)
     {
+        $this->db->where('post_check', false);
+        
         if ($search_type && $search_text) 
         {
             switch ($search_type) {
@@ -40,7 +42,7 @@ class Post_model extends CI_Model {
 
     public function getsById($user_id)
     {
-        $query = $this->db->get_where('post', array('user_id' => $user_id));
+        $query = $this->db->get_where('post', array('user_id' => $user_id, 'post_check'=>false));
         if ($query->num_rows() > 0)
         {
             return $query->result();
@@ -53,7 +55,7 @@ class Post_model extends CI_Model {
 
     public function getCount($user_id)
     {
-        $query = $this->db->get_where('post', array('user_id' => $user_id));
+        $query = $this->db->get_where('post', array('user_id' => $user_id, 'post_check'=>false));
         if ($query->num_rows() > 0)
         {
             return $query->num_rows();
@@ -66,13 +68,13 @@ class Post_model extends CI_Model {
 
     public function getTotalRows()
     {
-        $query = $this->db->query('SELECT * FROM post');
+        $query = $this->db->get_where('post', array('post_check'=>false));
         return $query->num_rows();
     }
 
     public function get($post_id)
     {
-        return $this->db->get_where('post', array('post_id'=>$post_id));
+        return $this->db->get_where('post', array('post_id'=>$post_id, 'post_check'=>false));
     }
 
     public function write($title, $content, $user_id)
@@ -110,7 +112,11 @@ class Post_model extends CI_Model {
 
     public function delete($post_id)
     {
-        $this->db->where('post_id', $post_id);
-        return $this->db->delete('post');
+        // $this->db->where('post_id', $post_id);
+        // return $this->db->delete('post');
+        $this->db->where(array('post_id' => $post_id));
+        $this->db->set('post_check', 'true', FALSE);
+        $this->db->update('post');
+        return $this->db->affected_rows();
     }
 }
