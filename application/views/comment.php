@@ -1,15 +1,18 @@
+<style>
+    .media {
+        border-radius: 0.25rem;
+        padding: 1rem;
+        /* padding-bottom: 0; */
+    }
+</style>
 <div class="container">
 <?php
     if ($comments)
     {
         foreach ($comments as $comment) 
         {
-            // echo $comment->comment_id;
-            // echo "<br>";
-            // echo $comment->content;
-            // echo "<hr>";
 ?>
-<div class="media" style="margin-left:<?=($comment->depth)*2?>rem;">
+    <div class="media" style="margin-left:<?=($comment->depth)*2?>rem;">
         <img class="mr-3 rounded-circle" src="/includes/img/profile_picture/<?=$comment->user_profile_picture?>" alt="profile picture" style="width:48px;height:48px;">
         <div class="media-body" style="text-align: left;">
             <div class="row">

@@ -134,7 +134,7 @@ class Comment_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
-    public function test($root, $depth, $seq)
+    public function getChildren($root, $depth, $seq) //자식 답글 출력 
     {
         $query = $this->db->get_where('comment', array('root' => $root, 'depth'=>$depth, 'seq >='=>$seq,'comment_check'=>false));
         if ($query->num_rows() > 0)
@@ -153,7 +153,7 @@ class Comment_model extends CI_Model {
     //     return $this->db->query($sql, array($root, $depth))->result_array();
     // }
 
-    public function getsTest($root,$seq) //게시물 별 등록된 댓글 출력
+    public function getBottom($root,$seq) //해당 댓글보다 아래쪽에 출력되는 모든 댓글 출력
     {
         $query = $this->db->order_by('root, seq')->get_where('comment', array('root'=>$root, 'seq >='=>$seq, 'comment_check'=>false));
         if ($query->num_rows() > 0) 

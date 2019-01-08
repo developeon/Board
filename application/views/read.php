@@ -88,6 +88,7 @@
                     }
                     else
                     { ?>
+                
                         <button class="btn btn-default w-100 h-100" id="write-button" type="button" data-toggle="modal" data-target="#loginModal">
                             등록
                         </button>
@@ -202,7 +203,6 @@
                         html += `<span style="cursor: pointer;" onclick="deleteComment(${comment.comment_id});">X</span>`;
                     html += `
                                     </div>
-                                   
                                 </div>
                                 <div class="row container">
                                     ${comment.content}
@@ -337,9 +337,8 @@
                     alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
                 success: function(resultData) {
-                    console.log(resultData);
                     var resultData = JSON.parse( resultData );
-                    if(!resultData) {
+                    if(!resultData.echo) {
                         document.getElementById("password").value = "";
                         document.getElementById("password").focus();
                         document.getElementById("login-alert").innerHTML = "<font color='red'>아이디 또는 비밀번호를 다시 확인하세요.<br>등록되지 않은 아이디이거나, 아이디 또는 비밀번호를 잘못 입력하셨습니다.</font>";

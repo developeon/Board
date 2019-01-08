@@ -104,19 +104,7 @@ class Board extends MY_Controller {
 
                 $post_id = $this->input->post('post_id');
                 $content = $this->input->post('content');
-                // if (!$post_id) //주소창 직접 접근
-                // {
-                //         $this->session->set_flashdata('message', '잘못된 접근입니다.');
-                //         redirect('/board');
-                // }
-                // if (!$content) //required 지운 경우 또는 name값을 수정한경우
-                // {
-                //         $this->session->set_flashdata('message', '댓글 내용을 입력하세요.');
-                //         redirect('/board/read/'.$post_id);
-                // }
-               
-                // $this->comment_model->writeComment($content, $post_id, $this->session->userdata('user_id'));
-                // redirect('/board/read/'.$post_id);
+   
                 echo $this->comment_model->writeComment($content, $post_id, $this->session->userdata('user_id'));
         }
 
@@ -138,22 +126,10 @@ class Board extends MY_Controller {
                 }
                 else
                 {
-                //         //만약 root와 depth가 같은게 있다면? 그 다음으로 가야함. 중간에 끼워넣는게 아니라. seq를 정해줘야할
-                //       if($this->comment_model->test($root, $depth))
-                //       {
-                //               $max_seq = $this->comment_model->test2($root, $depth);
-                //               //root와 depth가 같은 컬럼의 seq 최대값 +1로 insert를 하고 그 뒤에 있는 컬럼의 seq는 다 +1씩
-                //               $seq =$max_seq[0]["max(seq)"] + 1;
-                //       }
-                //       else
-                //       {
-                        
-                //       }
-
-                      if($this->comment_model->test($root, $depth, $seq))
+                      if($this->comment_model->getChildren($root, $depth, $seq))
                       {
                         $count = 0;
-                        $comments = $this->comment_model->getsTest($root, $seq);
+                        $comments = $this->comment_model->getBottom($root, $seq);
                         //echo var_dump($comments);
                         //exit;
                         //while
@@ -306,20 +282,11 @@ class Board extends MY_Controller {
                 $this->load->model('user_model');
 
                 $comment_id = $this->uri->rsegment(3,0);
-                //comment_id로 댓글 검색하고 없는경우 main으로 redirect
-                //있는경우 view로 출력. 그리고 해당 댓글이 작성된 게시물로 돌아가기 버튼도 만들기
-                // $data['comments'] = $this->comment_model->getAligned();
-                
                 $comment = $this->comment_model->getByCommentId($comment_id);
-      
-                // $data["comments"][0] = $comment;
-                // $comment_data = $this->user_model->get($data["comments"][0][0]->user_id)->row();
-                // $data["comments"][0][0]->user_name = $comment_data->name;
-                // $data["comments"][0][0]->user_profile_picture = $comment_data->profile_picture;
-               
+
                 if(!empty($comment))
                 {
-                        $comments = $this->comment_model->getsTest($comment[0]->root, $comment[0]->seq);
+                        $comments = $this->comment_model->getBottom($comment[0]->root, $comment[0]->seq);
                        
                         $depth = $comment[0]->depth;
                         $count = 0;
@@ -342,8 +309,6 @@ class Board extends MY_Controller {
                         redirect('/board');
                 }
 
-               
-                //array받아온거 foreach 돌면서 자식 답글이 맞는지 확인하면서 새로운 array만들기
                 $this->_header();
                 $this->load->view('comment', $data);
                 $this->_footer();
